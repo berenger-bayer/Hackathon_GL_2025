@@ -24,8 +24,10 @@ function AjouterPatientPage() {
         diagnosis: ""
     });
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
-    const handleAddPatient = async (patient)=>{
-        if (patient.age < 0) {
+    const handleAddPatient = async (event)=>{
+        event.preventDefault(); // Empêcher le rafraîchissement de la page au submit
+        // Vérification de l'âge
+        if (parseInt(newPatient.age) < 0) {
             alert("L'âge ne peut pas être négatif.");
             return;
         }
@@ -35,93 +37,124 @@ function AjouterPatientPage() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(patient)
+                body: JSON.stringify({
+                    name: newPatient.name,
+                    age: parseInt(newPatient.age),
+                    diagnosis: newPatient.diagnosis
+                })
             });
             if (res.ok) {
                 alert("Patient ajouté avec succès !");
-                router.push("/patients");
+                router.push("/patients"); // Rediriger vers la liste des patients après ajout
             } else {
-                const errorText = await res.text(); // Récupérer le message d'erreur brut
-                console.error("Erreur ajout patient:", errorText); // Afficher l'erreur
+                const errorText = await res.text();
+                console.error("Erreur ajout patient:", errorText);
+                alert("Erreur lors de l'ajout du patient.");
             }
         } catch (error) {
             console.error("Erreur serveur lors de l'ajout:", error);
+            alert("Une erreur est survenue lors de l'ajout.");
         }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "p-6",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                 className: "text-xl font-bold mb-4",
                 children: "Ajouter un patient"
             }, void 0, false, {
                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                lineNumber: 39,
+                lineNumber: 47,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                 onSubmit: handleAddPatient,
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                        type: "text",
-                        placeholder: "Nom",
-                        value: newPatient.name,
-                        onChange: (e)=>setNewPatient({
-                                ...newPatient,
-                                name: e.target.value
-                            }),
-                        className: "border p-2 mb-2"
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mb-4",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            type: "text",
+                            placeholder: "Nom",
+                            value: newPatient.name,
+                            onChange: (e)=>setNewPatient({
+                                    ...newPatient,
+                                    name: e.target.value
+                                }),
+                            className: "border p-2 w-full",
+                            required: true
+                        }, void 0, false, {
+                            fileName: "[project]/app/patients/ajouter/page.tsx",
+                            lineNumber: 51,
+                            columnNumber: 11
+                        }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                        lineNumber: 42,
+                        lineNumber: 50,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                        type: "number",
-                        placeholder: "Âge",
-                        value: newPatient.age,
-                        onChange: (e)=>setNewPatient({
-                                ...newPatient,
-                                age: e.target.value
-                            }),
-                        className: "border p-2 mb-2"
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mb-4",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            type: "number",
+                            placeholder: "Âge",
+                            value: newPatient.age,
+                            onChange: (e)=>setNewPatient({
+                                    ...newPatient,
+                                    age: e.target.value
+                                }),
+                            className: "border p-2 w-full",
+                            required: true
+                        }, void 0, false, {
+                            fileName: "[project]/app/patients/ajouter/page.tsx",
+                            lineNumber: 61,
+                            columnNumber: 11
+                        }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                        lineNumber: 49,
+                        lineNumber: 60,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                        type: "text",
-                        placeholder: "Diagnostic",
-                        value: newPatient.diagnosis,
-                        onChange: (e)=>setNewPatient({
-                                ...newPatient,
-                                diagnosis: e.target.value
-                            }),
-                        className: "border p-2 mb-2"
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mb-4",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            type: "text",
+                            placeholder: "Diagnostic",
+                            value: newPatient.diagnosis,
+                            onChange: (e)=>setNewPatient({
+                                    ...newPatient,
+                                    diagnosis: e.target.value
+                                }),
+                            className: "border p-2 w-full",
+                            required: true
+                        }, void 0, false, {
+                            fileName: "[project]/app/patients/ajouter/page.tsx",
+                            lineNumber: 71,
+                            columnNumber: 11
+                        }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                        lineNumber: 56,
+                        lineNumber: 70,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "submit",
-                        className: "bg-green-500 text-white px-4 py-2 rounded",
+                        className: "bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600",
                         children: "Ajouter Patient"
                     }, void 0, false, {
                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                        lineNumber: 63,
+                        lineNumber: 80,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                lineNumber: 41,
+                lineNumber: 49,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/patients/ajouter/page.tsx",
-        lineNumber: 38,
+        lineNumber: 46,
         columnNumber: 5
     }, this);
 }

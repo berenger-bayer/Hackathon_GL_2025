@@ -1,70 +1,58 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 
-export async function DELETE(req) {
+// Mettre à jour un patient
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  const { id } = params;  // Accès direct à params.id
+
   try {
-    const { id } = await req.json();
+    // Récupérer le corps de la requête
+    const body = await req.json();
+    const { name, age, diagnosis } = body;
 
-    if (!id) {
-      return NextResponse.json({ error: "ID du patient requis" }, { status: 400 });
+    // Vérification des données
+    if (!name || !age || !diagnosis) {
+      return NextResponse.json({ error: 'Données manquantes' }, { status: 400 });
     }
 
-    const patient = await prisma.patient.findUnique({ where: { id: Number(id) } });
-    if (!patient) {
-      return NextResponse.json({ error: "Patient non trouvé" }, { status: 404 });
+    // Vérification que l'âge est un entier
+    if (isNaN(age)) {
+      return NextResponse.json({ error: 'L\'âge doit être un entier valide' }, { status: 400 });
     }
 
-    await prisma.patient.delete({ where: { id: Number(id) } });
-
-    return NextResponse.json({ message: "Patient supprimé avec succès" }, { status: 200 });
-  } catch (error) {
-    console.error("Erreur lors de la suppression :", error);
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
-  }
-}
-
-export async function PUT(req, { params }) {
-  try {
-    const { id } = params;
-    const data = await req.json();
-
-    if (!id || Object.keys(data).length === 0) {
-      return NextResponse.json({ error: "Données invalides" }, { status: 400 });
-    }
-
-    const existingPatient = await prisma.patient.findUnique({ where: { id: Number(id) } });
-    if (!existingPatient) {
-      return NextResponse.json({ error: "Patient non trouvé" }, { status: 404 });
-    }
-
+    // Mettre à jour le patient dans la base de données
     const updatedPatient = await prisma.patient.update({
-      where: { id: Number(id) },
-      data,
+      where: { id },
+      data: { name, age: parseInt(age, 10), diagnosis },  // Assurez-vous que age est un entier
     });
 
-    return NextResponse.json(updatedPatient, { status: 200 });
+    return NextResponse.json(updatedPatient); // Renvoie le patient mis à jour
   } catch (error) {
-    console.error("Erreur lors de la modification :", error);
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    console.error('Erreur mise à jour patient:', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
 
-export async function GET(req) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const nameQuery = searchParams.get("name") || "";
-    const diagnosisQuery = searchParams.get("diagnosis") || "";
+// Récupérer un patient par ID
+export async function GET(req: Request, { params }: { params: { id: string } }) {
+  const { id } = params;  // Accès direct à params.id
 
-    const patients = await prisma.patient.findMany({
+  try {
+    // Récupérer le patient de la base de données
+    const patient = await prisma.patient.findUnique({
       where: {
-        name: { contains: nameQuery },
-        diagnosis: diagnosisQuery ? { equals: diagnosisQuery } : undefined,
+        id: id,
       },
     });
 
-    return NextResponse.json(patients);
+    // Vérifier si le patient existe
+    if (!patient) {
+      return NextResponse.json({ message: "Patient non trouvé" }, { status: 404 });
+    }
+
+    return NextResponse.json(patient); // Renvoie les données du patient
   } catch (error) {
-    console.error("Erreur lors de la récupération des patients :", error);
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    console.error('Erreur récupération patient:', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }

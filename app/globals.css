@@ -24,3 +24,37 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+@media print {
+  body {
+    background: white;
+    color: black;
+    font-size: 12pt;
+  }
+
+  nav, button, select, input, .no-print {
+    display: none !important;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+  }
+
+  header::before {
+    content: "AI4CKD - Liste des Patients";
+    display: block;
+    text-align: center;
+    font-size: 18pt;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+}

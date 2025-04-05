@@ -1,48 +1,55 @@
 "use client";
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+const DEFAULT_USERNAME = "admin";
+const DEFAULT_PASSWORD = "medecin123";
+
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (isLoggedIn) {
+      router.push("/patients"); // Redirection si déjà connecté
+    }
+  }, []);
 
-    if (res?.error) {
-      alert("Erreur : " + res.error);
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD) {
+      localStorage.setItem("isLoggedIn", "true");
+      router.push("/");
     } else {
-      router.push("/dashboard");
+      alert("Nom d'utilisateur ou mot de passe incorrect.");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleLogin} className="p-6 bg-white shadow-lg rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Connexion</h2>
+      <form onSubmit={handleLogin} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+        <h2 className="text-2xl font-semibold mb-6 text-center text-blue-600">Connexion Administrateur</h2>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border rounded mb-2"
+          type="text"
+          placeholder="Nom d'utilisateur"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full p-3 border rounded mb-4"
+          required
         />
         <input
           type="password"
           placeholder="Mot de passe"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
+          className="w-full p-3 border rounded mb-6"
+          required
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
+        <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition">
           Se connecter
         </button>
       </form>

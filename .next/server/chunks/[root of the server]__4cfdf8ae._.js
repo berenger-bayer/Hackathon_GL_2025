@@ -66,12 +66,15 @@ module.exports = mod;
 
 var { g: global, __dirname } = __turbopack_context__;
 {
+// lib/prisma.ts
 __turbopack_context__.s({
     "default": (()=>__TURBOPACK__default__export__)
 });
 var __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/@prisma/client [external] (@prisma/client, cjs)");
 ;
-const prisma = new __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$29$__["PrismaClient"]();
+const globalForPrisma = globalThis;
+const prisma = globalForPrisma.prisma ?? new __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$29$__["PrismaClient"]();
+if ("TURBOPACK compile-time truthy", 1) globalForPrisma.prisma = prisma;
 const __TURBOPACK__default__export__ = prisma;
 }}),
 "[project]/app/api/stats/route.ts [app-route] (ecmascript)": ((__turbopack_context__) => {
@@ -79,6 +82,7 @@ const __TURBOPACK__default__export__ = prisma;
 
 var { g: global, __dirname } = __turbopack_context__;
 {
+// app/api/stats/route.ts
 __turbopack_context__.s({
     "GET": (()=>GET)
 });
