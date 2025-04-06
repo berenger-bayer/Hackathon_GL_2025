@@ -59,6 +59,25 @@ export default function PatientsPage() {
     }
   };
 
+  const highlightMatch = (text: string, search: string) => {
+    const regex = new RegExp(`(${search})`, "gi");
+    return text.replace(regex, `<mark class="bg-yellow-300">$1</mark>`);
+  };
+
+  const getHighlighted = (key: string, value: any): JSX.Element | string => {
+    const text = String(value);
+    if (filterKey === key && search) {
+      return (
+        <span
+          dangerouslySetInnerHTML={{
+            __html: highlightMatch(text, search),
+          }}
+        />
+      );
+    }
+    return text;
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="container mx-auto p-6">
@@ -116,12 +135,12 @@ export default function PatientsPage() {
           </button>
         </div>
 
-        {/* Tableau */}
-        <div className="overflow-x-auto bg-white shadow-lg rounded-lg printable">
-          <table className="w-full border-collapse border border-gray-300">
+        <div className="grid gap-4 md:overflow-x-auto md:bg-white md:shadow-lg md:rounded-lg">
+          {/* Pour les grands écrans */}
+          <table className="hidden md:table w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-indigo-100">
-                <th className="border p-4 text-left text-indigo-600">Patient n°</th> {/* Colonne # pour les numéros incrémentés */}
+                <th className="border p-4 text-left text-indigo-600">Patient n°</th>
                 <th className="border p-4 text-left text-indigo-600">Nom</th>
                 <th className="border p-4 text-left text-indigo-600">Âge</th>
                 <th className="border p-4 text-left text-indigo-600">Diagnostic</th>
@@ -129,38 +148,75 @@ export default function PatientsPage() {
               </tr>
             </thead>
             <tbody>
-              {filteredPatients.length > 0 ? (
-                filteredPatients.map((patient, index) => (
-                  <tr key={patient.id} className="hover:bg-gray-100">
-                    <td className="border p-4 text-black">{index + 1}</td> {/* Affichage du numéro incrémenté */}
-                    <td className="border p-4 text-black">{patient.name}</td>
-                    <td className="border p-4 text-black">{patient.age}</td>
-                    <td className="border p-4 text-black">{patient.diagnosis}</td>
-                    <td className="border p-4 flex space-x-4 justify-center text-indigo-600 no-print">
-                      <button
-                        onClick={() => router.push(`/patients/modifier/${patient.id}`)}
-                        className="bg-yellow-500 text-white p-2 rounded-lg hover:bg-yellow-600 transition"
-                      >
-                        <FaEdit size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(patient.id)}
-                        className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition"
-                      >
-                        <FaTrash size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="text-center py-6 text-gray-500">
-                    Aucun patient trouvé.
+              {filteredPatients.map((patient, index) => (
+                <tr key={patient.id} className="hover:bg-gray-100">
+                  <td className="border p-4 text-black">
+                    {getHighlighted("id", index + 1)}
+                  </td>
+                  <td className="border p-4 text-black">
+                    {getHighlighted("name", patient.name)}
+                  </td>
+                  <td className="border p-4 text-black">
+                    {getHighlighted("age", patient.age)}
+                  </td>
+                  <td className="border p-4 text-black">
+                    {getHighlighted("diagnosis", patient.diagnosis)}
+                  </td>
+                  <td className="border p-4 flex space-x-4 justify-center text-indigo-600 no-print">
+                    <button
+                      onClick={() => router.push(`/patients/modifier/${patient.id}`)}
+                      className="bg-yellow-500 text-white p-2 rounded-lg hover:bg-yellow-600 transition"
+                    >
+                      <FaEdit size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(patient.id)}
+                      className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition"
+                    >
+                      <FaTrash size={18} />
+                    </button>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
+
+          {/* Version mobile */}
+          <div className="md:hidden grid gap-4">
+            {filteredPatients.map((patient, index) => (
+              <div key={patient.id} className="bg-white shadow rounded-lg p-4 text-sm">
+                <div className="font-bold text-indigo-600 mb-2">
+                  Patient n°{getHighlighted("id", index + 1)}
+                </div>
+                <p>
+                  <strong>Nom :</strong>{" "}
+                  {getHighlighted("name", patient.name)}
+                </p>
+                <p>
+                  <strong>Âge :</strong>{" "}
+                  {getHighlighted("age", patient.age)}
+                </p>
+                <p>
+                  <strong>Diagnostic :</strong>{" "}
+                  {getHighlighted("diagnosis", patient.diagnosis)}
+                </p>
+                <div className="flex justify-end space-x-3 mt-4">
+                  <button
+                    onClick={() => router.push(`/patients/modifier/${patient.id}`)}
+                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition"
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(patient.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
