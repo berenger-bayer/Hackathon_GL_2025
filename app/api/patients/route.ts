@@ -28,7 +28,17 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    const patients = await prisma.patient.findMany();
+    const patients = await prisma.patient.findMany({
+      take: 50,
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        name: true,
+        age: true,
+        diagnosis: true,
+         },
+    });
+    ;
     return NextResponse.json(patients);
   } catch (error) {
     console.error('Erreur lors du chargement des patients:', error);

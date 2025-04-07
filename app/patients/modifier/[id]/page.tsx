@@ -68,7 +68,7 @@ export default function ModifierPatientPage() {
       }
     } catch (err) {
       console.error("Erreur lors de la mise à jour du patient:", err);
-      alert(`Erreur lors de la mise à jour du patient: ${err.message}`);
+      alert("Erreur lors de la mise à jour du patient.");
     }
   };
 

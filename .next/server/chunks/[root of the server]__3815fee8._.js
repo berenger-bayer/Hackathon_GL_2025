@@ -121,7 +121,19 @@ async function POST(req) {
 }
 async function GET() {
     try {
-        const patients = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].patient.findMany();
+        const patients = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].patient.findMany({
+            take: 50,
+            orderBy: {
+                createdAt: 'desc'
+            },
+            select: {
+                id: true,
+                name: true,
+                age: true,
+                diagnosis: true
+            }
+        });
+        ;
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(patients);
     } catch (error) {
         console.error('Erreur lors du chargement des patients:', error);

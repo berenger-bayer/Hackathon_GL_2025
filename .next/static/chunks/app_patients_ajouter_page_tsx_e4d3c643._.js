@@ -47,7 +47,7 @@ function AjouterPatientPage() {
             });
             if (res.ok) {
                 alert("Patient ajouté avec succès !");
-                router.push("/patients"); // Rediriger vers la liste des patients après ajout
+                router.push("/patients");
             } else {
                 const errorText = await res.text();
                 console.error("Erreur ajout patient:", errorText);

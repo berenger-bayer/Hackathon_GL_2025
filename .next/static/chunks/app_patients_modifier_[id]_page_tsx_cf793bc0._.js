@@ -91,7 +91,7 @@ function ModifierPatientPage() {
             }
         } catch (err) {
             console.error("Erreur lors de la mise à jour du patient:", err);
-            alert(`Erreur lors de la mise à jour du patient: ${err.message}`);
+            alert("Erreur lors de la mise à jour du patient.");
         }
     };
     const handleCancel = ()=>{
@@ -243,7 +243,7 @@ function ModifierPatientPage() {
         columnNumber: 5
     }, this);
 }
-_s(ModifierPatientPage, "iWFwD3Ve/n1XTjul5aqSRFg8onk=", false, function() {
+_s(ModifierPatientPage, "EwQpZA8ZHdNgCl+LgmM5a23vxLo=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"]

@@ -1,14 +1,22 @@
-"use client";  // Ajoutez cette ligne en haut du fichier
+"use client";
 
+import React, { JSX } from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FaPlus, FaEdit, FaTrash, FaPrint } from "react-icons/fa";
 
+type Patient = {
+  id: string;
+  name: string;
+  age: number;
+  diagnosis: string;
+};
+
 export default function PatientsPage() {
-  const [patients, setPatients] = useState([]);
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [search, setSearch] = useState("");
-  const [filterKey, setFilterKey] = useState("name");
+  const [filterKey, setFilterKey] = useState<keyof Patient>("name");
   const [sortAsc, setSortAsc] = useState(true);
   const router = useRouter();
 
@@ -64,7 +72,7 @@ export default function PatientsPage() {
     return text.replace(regex, `<mark class="bg-yellow-300">$1</mark>`);
   };
 
-  const getHighlighted = (key: string, value: any): JSX.Element | string => {
+  const getHighlighted = (key: keyof Patient, value: string | number): JSX.Element | string => {
     const text = String(value);
     if (filterKey === key && search) {
       return (
@@ -102,7 +110,7 @@ export default function PatientsPage() {
 
           <select
             value={filterKey}
-            onChange={(e) => setFilterKey(e.target.value)}
+            onChange={(e) => setFilterKey(e.target.value as keyof Patient)}
             className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-indigo-600 text-lg"
           >
             <option value="id">ID</option>
@@ -136,11 +144,11 @@ export default function PatientsPage() {
         </div>
 
         <div className="grid gap-4 md:overflow-x-auto md:bg-white md:shadow-lg md:rounded-lg">
-          {/* Pour les grands écrans */}
+          {/* Version bureau */}
           <table className="hidden md:table w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-indigo-100">
-                <th className="border p-4 text-left text-indigo-600">Patient n°</th>
+                <th className="border p-4 text-left text-indigo-600">ID</th>
                 <th className="border p-4 text-left text-indigo-600">Nom</th>
                 <th className="border p-4 text-left text-indigo-600">Âge</th>
                 <th className="border p-4 text-left text-indigo-600">Diagnostic</th>
@@ -148,10 +156,10 @@ export default function PatientsPage() {
               </tr>
             </thead>
             <tbody>
-              {filteredPatients.map((patient, index) => (
+              {filteredPatients.map((patient) => (
                 <tr key={patient.id} className="hover:bg-gray-100">
                   <td className="border p-4 text-black">
-                    {getHighlighted("id", index + 1)}
+                    {getHighlighted("id", patient.id)}
                   </td>
                   <td className="border p-4 text-black">
                     {getHighlighted("name", patient.name)}
@@ -183,10 +191,10 @@ export default function PatientsPage() {
 
           {/* Version mobile */}
           <div className="md:hidden grid gap-4">
-            {filteredPatients.map((patient, index) => (
+            {filteredPatients.map((patient) => (
               <div key={patient.id} className="bg-white shadow rounded-lg p-4 text-sm">
                 <div className="font-bold text-indigo-600 mb-2">
-                  Patient n°{getHighlighted("id", index + 1)}
+                  ID : {getHighlighted("id", patient.id)}
                 </div>
                 <p>
                   <strong>Nom :</strong>{" "}
