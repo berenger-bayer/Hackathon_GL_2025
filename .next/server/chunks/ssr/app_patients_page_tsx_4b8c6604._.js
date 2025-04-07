@@ -24,6 +24,7 @@ function PatientsPage() {
     const [search, setSearch] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [filterKey, setFilterKey] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("name");
     const [sortAsc, setSortAsc] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
+    const [notification, setNotification] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -36,6 +37,19 @@ function PatientsPage() {
             if (!res.ok) throw new Error(`Erreur API: ${res.status}`);
             const data = await res.json();
             setPatients(data);
+            const alertes = data.filter((p)=>p.diagnosis?.toLowerCase().includes("critique"));
+            const maintenant = new Date();
+            const dansTroisJours = new Date();
+            dansTroisJours.setDate(maintenant.getDate() + 3);
+            const rappels = data.filter((p)=>{
+                const rdv = new Date(p.rendezvous);
+                return rdv >= maintenant && rdv <= dansTroisJours;
+            });
+            if (alertes.length > 0) {
+                setNotification(`⚠️ ${alertes.length} patient(s) en état critique`);
+            } else if (rappels.length > 0) {
+                setNotification(`🔔 ${rappels.length} rendez-vous à venir dans 3 jours`);
+            }
         }).catch((err)=>{
             console.error("Erreur chargement patients:", err);
             setPatients([]);
@@ -44,8 +58,11 @@ function PatientsPage() {
     const filteredPatients = [
         ...patients
     ].filter((patient)=>{
-        const val = String(patient[filterKey]).toLowerCase();
-        return val.includes(search.toLowerCase());
+        const value = patient[filterKey];
+        if (filterKey === "id") {
+            return String(value).includes(search);
+        }
+        return String(value).toLowerCase().includes(search.toLowerCase());
     }).sort((a, b)=>{
         if (a[filterKey] < b[filterKey]) return sortAsc ? -1 : 1;
         if (a[filterKey] > b[filterKey]) return sortAsc ? 1 : -1;
@@ -79,7 +96,7 @@ function PatientsPage() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/patients/page.tsx",
-                lineNumber: 71,
+                lineNumber: 90,
                 columnNumber: 9
             }, this);
         }
@@ -106,7 +123,7 @@ function PatientsPage() {
                     children: "Liste des Patients"
                 }, void 0, false, {
                     fileName: "[project]/app/patients/page.tsx",
-                    lineNumber: 84,
+                    lineNumber: 103,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -120,7 +137,7 @@ function PatientsPage() {
                             className: "w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-indigo-600 text-lg"
                         }, void 0, false, {
                             fileName: "[project]/app/patients/page.tsx",
-                            lineNumber: 95,
+                            lineNumber: 113,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -133,7 +150,7 @@ function PatientsPage() {
                                     children: "ID"
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 108,
+                                    lineNumber: 126,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -141,7 +158,7 @@ function PatientsPage() {
                                     children: "Nom"
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 109,
+                                    lineNumber: 127,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -149,7 +166,7 @@ function PatientsPage() {
                                     children: "Âge"
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 110,
+                                    lineNumber: 128,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -157,39 +174,7 @@ function PatientsPage() {
                                     children: "Diagnostic"
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 111,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/app/patients/page.tsx",
-                            lineNumber: 103,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: ()=>setSortAsc(!sortAsc),
-                            className: "w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition text-lg",
-                            children: sortAsc ? "↑ Croissant" : "↓ Décroissant"
-                        }, void 0, false, {
-                            fileName: "[project]/app/patients/page.tsx",
-                            lineNumber: 114,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: ()=>router.push("/patients/ajouter"),
-                            className: "w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition flex items-center justify-center space-x-2 text-lg",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaPlus"], {}, void 0, false, {
-                                    fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 125,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "hidden md:inline",
-                                    children: "Ajouter"
-                                }, void 0, false, {
-                                    fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 126,
+                                    lineNumber: 129,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -199,12 +184,44 @@ function PatientsPage() {
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: ()=>setSortAsc(!sortAsc),
+                            className: "w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition text-lg",
+                            children: sortAsc ? "↑ Croissant" : "↓ Décroissant"
+                        }, void 0, false, {
+                            fileName: "[project]/app/patients/page.tsx",
+                            lineNumber: 132,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: ()=>router.push("/patients/ajouter"),
+                            className: "w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition flex items-center justify-center space-x-2 text-lg",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaPlus"], {}, void 0, false, {
+                                    fileName: "[project]/app/patients/page.tsx",
+                                    lineNumber: 143,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "hidden md:inline",
+                                    children: "Ajouter"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/patients/page.tsx",
+                                    lineNumber: 144,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/app/patients/page.tsx",
+                            lineNumber: 139,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             onClick: ()=>window.print(),
                             className: "w-full bg-gray-500 text-white py-3 rounded-md hover:bg-gray-600 transition flex items-center justify-center space-x-2 text-lg",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaPrint"], {}, void 0, false, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 133,
+                                    lineNumber: 151,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -212,19 +229,19 @@ function PatientsPage() {
                                     children: "Imprimer"
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 134,
+                                    lineNumber: 152,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/patients/page.tsx",
-                            lineNumber: 129,
+                            lineNumber: 147,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/patients/page.tsx",
-                    lineNumber: 94,
+                    lineNumber: 112,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -242,7 +259,7 @@ function PatientsPage() {
                                                 children: "Patient n°"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 143,
+                                                lineNumber: 160,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -250,7 +267,7 @@ function PatientsPage() {
                                                 children: "Nom"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 144,
+                                                lineNumber: 161,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -258,7 +275,7 @@ function PatientsPage() {
                                                 children: "Âge"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 145,
+                                                lineNumber: 162,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -266,7 +283,7 @@ function PatientsPage() {
                                                 children: "Diagnostic"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 146,
+                                                lineNumber: 163,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -274,18 +291,18 @@ function PatientsPage() {
                                                 children: "Actions"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 147,
+                                                lineNumber: 164,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/page.tsx",
-                                        lineNumber: 142,
+                                        lineNumber: 159,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 141,
+                                    lineNumber: 158,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -297,7 +314,7 @@ function PatientsPage() {
                                                     children: getHighlighted("id", index + 1)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 153,
+                                                    lineNumber: 170,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -305,7 +322,7 @@ function PatientsPage() {
                                                     children: getHighlighted("name", patient.name)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 156,
+                                                    lineNumber: 173,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -313,7 +330,7 @@ function PatientsPage() {
                                                     children: getHighlighted("age", patient.age)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 159,
+                                                    lineNumber: 176,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -321,12 +338,27 @@ function PatientsPage() {
                                                     children: getHighlighted("diagnosis", patient.diagnosis)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 162,
+                                                    lineNumber: 179,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                    className: "border p-4 flex space-x-4 justify-center text-indigo-600 no-print",
+                                                    className: "border p-4 flex space-x-2 justify-center text-indigo-600 no-print",
                                                     children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            onClick: ()=>router.push(`/patients/dossier/${patient.id}`),
+                                                            className: "bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaEye"], {
+                                                                size: 18
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 187,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/patients/page.tsx",
+                                                            lineNumber: 183,
+                                                            columnNumber: 21
+                                                        }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>router.push(`/patients/modifier/${patient.id}`),
                                                             className: "bg-yellow-500 text-white p-2 rounded-lg hover:bg-yellow-600 transition",
@@ -334,12 +366,12 @@ function PatientsPage() {
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/patients/page.tsx",
-                                                                lineNumber: 170,
+                                                                lineNumber: 193,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 166,
+                                                            lineNumber: 189,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -349,35 +381,35 @@ function PatientsPage() {
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/patients/page.tsx",
-                                                                lineNumber: 176,
+                                                                lineNumber: 199,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 172,
+                                                            lineNumber: 195,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 165,
+                                                    lineNumber: 182,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, patient.id, true, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 152,
+                                            lineNumber: 169,
                                             columnNumber: 17
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 150,
+                                    lineNumber: 167,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/patients/page.tsx",
-                            lineNumber: 140,
+                            lineNumber: 157,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -393,7 +425,7 @@ function PatientsPage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 188,
+                                            lineNumber: 210,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -402,15 +434,15 @@ function PatientsPage() {
                                                     children: "Nom :"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 192,
-                                                    columnNumber: 19
+                                                    lineNumber: 213,
+                                                    columnNumber: 20
                                                 }, this),
                                                 " ",
                                                 getHighlighted("name", patient.name)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 191,
+                                            lineNumber: 213,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -419,15 +451,15 @@ function PatientsPage() {
                                                     children: "Âge :"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 196,
-                                                    columnNumber: 19
+                                                    lineNumber: 214,
+                                                    columnNumber: 20
                                                 }, this),
                                                 " ",
                                                 getHighlighted("age", patient.age)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 195,
+                                            lineNumber: 214,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -436,31 +468,44 @@ function PatientsPage() {
                                                     children: "Diagnostic :"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 200,
-                                                    columnNumber: 19
+                                                    lineNumber: 215,
+                                                    columnNumber: 20
                                                 }, this),
                                                 " ",
                                                 getHighlighted("diagnosis", patient.diagnosis)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 199,
+                                            lineNumber: 215,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex justify-end space-x-3 mt-4",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    onClick: ()=>router.push(`/patients/modifier/${patient.id}`),
-                                                    className: "bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaEdit"], {}, void 0, false, {
+                                                    onClick: ()=>router.push(`/patients/dossier/${patient.id}`),
+                                                    className: "bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaEye"], {}, void 0, false, {
                                                         fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 208,
+                                                        lineNumber: 221,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 204,
+                                                    lineNumber: 217,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    onClick: ()=>router.push(`/patients/modifier/${patient.id}`),
+                                                    className: "bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaEdit"], {}, void 0, false, {
+                                                        fileName: "[project]/app/patients/page.tsx",
+                                                        lineNumber: 227,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/patients/page.tsx",
+                                                    lineNumber: 223,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -468,46 +513,54 @@ function PatientsPage() {
                                                     className: "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition",
                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaTrash"], {}, void 0, false, {
                                                         fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 214,
+                                                        lineNumber: 233,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 210,
+                                                    lineNumber: 229,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 203,
+                                            lineNumber: 216,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, patient.id, true, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 187,
+                                    lineNumber: 209,
                                     columnNumber: 15
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/patients/page.tsx",
-                            lineNumber: 185,
+                            lineNumber: 207,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/patients/page.tsx",
-                    lineNumber: 138,
+                    lineNumber: 156,
                     columnNumber: 9
+                }, this),
+                notification && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Notification, {
+                    message: notification,
+                    onClose: ()=>setNotification("")
+                }, void 0, false, {
+                    fileName: "[project]/app/patients/page.tsx",
+                    lineNumber: 242,
+                    columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/patients/page.tsx",
-            lineNumber: 83,
+            lineNumber: 102,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/patients/page.tsx",
-        lineNumber: 82,
+        lineNumber: 101,
         columnNumber: 5
     }, this);
 }

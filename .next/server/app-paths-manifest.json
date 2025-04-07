@@ -8,7 +8,9 @@
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
+  "/patients/[id]/route": "app/patients/[id]/route.js",
   "/patients/ajouter/page": "app/patients/ajouter/page.js",
+  "/patients/dossier/[id]/page": "app/patients/dossier/[id]/page.js",
   "/patients/modifier/[id]/page": "app/patients/modifier/[id]/page.js",
   "/patients/page": "app/patients/page.js"
 }

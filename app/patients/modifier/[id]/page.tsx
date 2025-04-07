@@ -10,6 +10,7 @@ export default function ModifierPatientPage() {
     name: "",
     age: "",
     diagnosis: "",
+    photo: "", // Photo du patient
   });
 
   useEffect(() => {
@@ -78,57 +79,91 @@ export default function ModifierPatientPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-semibold text-center text-indigo-600 mb-6">Modifier Patient</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1 text-gray-700 font-medium">Nom</label>
+      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        {/* En-tête avec le nom de l'application, de l'hôpital, etc. */}
+        <div className="text-center mb-6">
+          <h2 className="text-3xl font-semibold text-indigo-600">Modifier Patient</h2>
+          <div className="text-gray-600">
+            <p className="text-xl">Application Santé</p>
+            <p>Hôpital XYZ</p>
+            <p>Département de Médecine</p>
+          </div>
+        </div>
+
+        {/* Fiche patient */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+            {/* Photo du patient */}
+            <div className="flex justify-center mb-4">
+              <div className="w-32 h-32 bg-gray-300 rounded-full overflow-hidden">
+                {patient.photo ? (
+                  <img src={patient.photo} alt="Photo du patient" className="w-full h-full object-cover" />
+                ) : (
+                  <p className="text-center text-white py-12">Pas de photo</p>
+                )}
+              </div>
+            </div>
+            {/* Bouton pour changer la photo */}
             <input
-              type="text"
-              name="name"
-              value={patient.name}
-              onChange={handleChange}
-              required
-              className="w-full border p-3 rounded-md"
+              type="file"
+              onChange={(e) => setPatient({ ...patient, photo: URL.createObjectURL(e.target.files[0]) })}
+              className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition"
             />
           </div>
-          <div>
-            <label className="block mb-1 text-gray-700 font-medium">Âge</label>
-            <input
-              type="number"
-              name="age"
-              value={patient.age}
-              onChange={handleChange}
-              required
-              className="w-full border p-3 rounded-md"
-            />
+
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-1 text-gray-700 font-medium">Nom</label>
+              <input
+                type="text"
+                name="name"
+                value={patient.name}
+                onChange={handleChange}
+                required
+                className="w-full border p-3 rounded-md"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-gray-700 font-medium">Âge</label>
+              <input
+                type="number"
+                name="age"
+                value={patient.age}
+                onChange={handleChange}
+                required
+                className="w-full border p-3 rounded-md"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-gray-700 font-medium">Diagnostic</label>
+              <textarea
+                name="diagnosis"
+                value={patient.diagnosis}
+                onChange={handleChange}
+                required
+                className="w-full border p-3 rounded-md"
+              />
+            </div>
           </div>
-          <div>
-            <label className="block mb-1 text-gray-700 font-medium">Diagnostic</label>
-            <textarea
-              name="diagnosis"
-              value={patient.diagnosis}
-              onChange={handleChange}
-              required
-              className="w-full border p-3 rounded-md"
-            />
-          </div>
-          <div className="flex justify-between">
-            <button
-              type="submit"
-              className="w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition"
-            >
-              Enregistrer les modifications
-            </button>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="ml-4 w-full bg-gray-400 text-white py-3 rounded-md hover:bg-gray-500 transition"
-            >
-              Annuler
-            </button>
-          </div>
-        </form>
+        </div>
+
+        {/* Actions */}
+        <div className="flex justify-between mt-6">
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition"
+          >
+            Enregistrer les modifications
+          </button>
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="ml-4 w-full bg-gray-400 text-white py-3 rounded-md hover:bg-gray-500 transition"
+          >
+            Annuler
+          </button>
+        </div>
       </div>
     </div>
   );
