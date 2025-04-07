@@ -429,6 +429,10 @@
     margin-inline: auto;
   }
 
+  .my-12 {
+    margin-block: calc(var(--spacing) * 12);
+  }
+
   .mt-1 {
     margin-top: calc(var(--spacing) * 1);
   }
@@ -591,6 +595,10 @@
 
   .flex-grow {
     flex-grow: 1;
+  }
+
+  .table-auto {
+    table-layout: auto;
   }
 
   .border-collapse {
