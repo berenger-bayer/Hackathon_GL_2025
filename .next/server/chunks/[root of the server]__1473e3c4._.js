@@ -91,7 +91,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app
 ;
 ;
 async function PUT(req, { params }) {
-    const { id } = params; // Accès direct à params.id
+    const { id } = params; // Accès direct à params.id (pas besoin d'attendre ici, Next.js le fait automatiquement)
     try {
         // Récupérer le corps de la requête
         const body = await req.json();
@@ -105,7 +105,7 @@ async function PUT(req, { params }) {
             });
         }
         // Vérification que l'âge est un entier
-        if (isNaN(age)) {
+        if (isNaN(Number(age))) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'L\'âge doit être un entier valide'
             }, {

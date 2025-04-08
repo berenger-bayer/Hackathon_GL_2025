@@ -2,105 +2,239 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { FiUsers, FiHeart, FiTrendingUp, FiAlertTriangle, FiRefreshCw, FiTrendingDown } from "react-icons/fi";
+import { DateRangePicker } from "../components/charts/DateRangePicker";
+import { BarChart } from "../components/charts/BarChart";
+import { PieChart } from "../components/charts/PieChart";
+import { ProgressCircle } from "../components/charts/ProgressCircle";
+import { DataTable } from "../components/charts/DataTable";
+import { CalendarChart } from "../components/charts/CalendarChart";
 
 type Stats = {
   totalPatients: number;
   averageAge: number;
-  diagnoses: { diagnosis: string; _count: { diagnosis: number } }[];
+  genders: { gender: string; count: number }[];
+  diagnoses: { diagnosis: string; count: number }[];
+  monthlyTrend: { month: string; count: number }[];
+  riskDistribution: { risk: string; count: number }[];
+  recentPatients: { id: string; name: string; lastVisit: string; status: string }[];
 };
 
-export default function DashboardPage() {
+export default function ModernDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [dateRange, setDateRange] = useState({
+    start: new Date(new Date().setMonth(new Date().getMonth() - 3)),
+    end: new Date()
+  });
 
   useEffect(() => {
-    fetch("/api/stats")
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          start: dateRange.start.toISOString(),
+          end: dateRange.end.toISOString()
+        });
+        
+        const res = await fetch(`/api/stats?${params}`);
+        const data = await res.json();
         setStats(data);
+      } catch (error) {
+        console.error("Fetch error:", error);
+      } finally {
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erreur de récupération des statistiques :", error);
-        setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [dateRange]);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-lg font-medium text-gray-500 animate-pulse">
-          Chargement des statistiques...
-        </p>
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-lg font-medium text-gray-600">
+            Chargement des données...
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <motion.div
-      className="p-6 max-w-6xl mx-auto"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <h1 className="text-3xl md:text-4xl font-bold text-center text-blue-700 mb-10">
-        📊 Tableau de bord – Statistiques Globales
-      </h1>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-900">Tableau de bord AI4CKD</h1>
+          <div className="flex items-center space-x-4">
+            <DateRangePicker value={dateRange} onChange={setDateRange} />
+            <button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200">
+              <FiRefreshCw className="text-gray-600" />
+            </button>
+          </div>
+        </div>
+      </header>
 
-      {/* Statistiques globales */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div className="p-6 bg-white rounded-2xl shadow-md flex flex-col items-center justify-center">
-          <h2 className="text-sm text-gray-500 mb-2">Total Patients</h2>
-          <p className="text-4xl font-bold text-blue-600">{stats?.totalPatients}</p>
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        {/* KPI Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+        >
+          <KpiCard
+            icon={<FiUsers className="text-blue-500" size={24} />}
+            title="Patients"
+            value={stats?.totalPatients || 0}
+            change="+12%"
+            trend="up"
+          />
+          <KpiCard
+            icon={<FiHeart className="text-green-500" size={24} />}
+            title="Âge Moyen"
+            value={stats?.averageAge ? stats.averageAge.toFixed(1) : "N/A"}
+            change="+2.5%"
+            trend="up"
+          />
+          <KpiCard
+            icon={<FiTrendingUp className="text-purple-500" size={24} />}
+            title="Nouveaux Cas"
+            value={stats?.monthlyTrend?.[stats.monthlyTrend.length - 1]?.count || 0}
+            change="+8%"
+            trend="up"
+          />
+          <KpiCard
+            icon={<FiAlertTriangle className="text-red-500" size={24} />}
+            title="Cas Graves"
+            value={stats?.riskDistribution?.find(r => r.risk === "High")?.count || 0}
+            change="-3%"
+            trend="down"
+          />
+        </motion.div>
+
+        {/* Charts Row 1 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white p-6 rounded-xl shadow-sm"
+          >
+            <h2 className="text-lg font-semibold mb-4">Activité Mensuelle</h2>
+            <BarChart
+              data={stats?.monthlyTrend || []}
+              xField="month"
+              yField="count"
+              height={300}
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white p-6 rounded-xl shadow-sm"
+          >
+            <h2 className="text-lg font-semibold mb-4">Répartition par Genre</h2>
+            <PieChart
+              data={stats?.genders || []}
+              angleField="count"
+              colorField="gender"
+              height={300}
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white p-6 rounded-xl shadow-sm"
+          >
+            <h2 className="text-lg font-semibold mb-4">Niveau de Risque</h2>
+            <ProgressCircle
+              data={stats?.riskDistribution || []}
+              height={300}
+            />
+          </motion.div>
         </div>
 
-        <div className="p-6 bg-white rounded-2xl shadow-md flex flex-col items-center justify-center">
-          <h2 className="text-sm text-gray-500 mb-2">Âge Moyen</h2>
-          <p className="text-4xl font-bold text-green-600">
-            {Number.isFinite(stats?.averageAge) ? stats.averageAge.toFixed(1) : "N/A"}
-          </p>
-        </div>
+        {/* Charts Row 2 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-white p-6 rounded-xl shadow-sm"
+          >
+            <h2 className="text-lg font-semibold mb-4">Diagnostics Fréquents</h2>
+            <CalendarChart
+              data={stats?.diagnoses || []}
+              height={350}
+            />
+          </motion.div>
 
-        <div className="p-6 bg-white rounded-2xl shadow-md flex flex-col items-center justify-center">
-          <h2 className="text-sm text-gray-500 mb-2">Types de diagnostics</h2>
-          <p className="text-4xl font-bold text-purple-600">
-            {stats?.diagnoses?.length || 0}
-          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white p-6 rounded-xl shadow-sm"
+          >
+            <h2 className="text-lg font-semibold mb-4">Patients Récents</h2>
+            <DataTable
+              data={stats?.recentPatients || []}
+              columns={[
+                { header: "Nom", accessor: "name" },
+                { header: "Dernière Visite", accessor: "lastVisit" },
+                { 
+                  header: "Statut", 
+                  accessor: "status",
+                  cell: (value) => (
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      value === "Critique" ? "bg-red-100 text-red-800" :
+                      value === "Stable" ? "bg-green-100 text-green-800" :
+                      "bg-yellow-100 text-yellow-800"
+                    }`}>
+                      {value}
+                    </span>
+                  )
+                }
+              ]}
+              height={350}
+            />
+          </motion.div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+// Component for KPI Cards
+function KpiCard({ icon, title, value, change, trend }) {
+  return (
+    <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+      <div className="flex justify-between">
+        <div>
+          <p className="text-sm font-medium text-gray-500">{title}</p>
+          <p className="text-3xl font-bold mt-2 text-gray-900">{value}</p>
+        </div>
+        <div className="h-10 w-10 rounded-full bg-gray-50 flex items-center justify-center">
+          {icon}
         </div>
       </div>
-
-                {/* Tableau des diagnostics */}
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-              📋 Répartition des diagnostics
-            </h2>
-
-            {stats?.diagnoses && stats.diagnoses.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="min-w-full border border-gray-200 text-left text-sm sm:text-base">
-                  <thead className="bg-gray-100 text-gray-700">
-                    <tr>
-                      <th className="px-4 py-3 border-b whitespace-nowrap">Diagnostic</th>
-                      <th className="px-4 py-3 border-b whitespace-nowrap">Nombre de cas</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {stats.diagnoses.map((d) => (
-                      <tr key={d.diagnosis} className="hover:bg-gray-50 transition">
-                        <td className="px-4 py-3 border-b text-gray-700">{d.diagnosis}</td>
-                        <td className="px-4 py-3 border-b font-semibold text-blue-600">
-                          {d._count.diagnosis}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <p className="text-gray-500 italic">Aucun diagnostic trouvé.</p>
-            )}
-          </div>
-
-    </motion.div>
+      <div className={`mt-4 flex items-center text-sm ${
+        trend === "up" ? "text-green-600" : "text-red-600"
+      }`}>
+        {trend === "up" ? (
+          <FiTrendingUp className="mr-1" />
+        ) : (
+          <FiTrendingDown className="mr-1" />
+        )}
+        {change}
+        <span className="text-gray-500 ml-1">vs période précédente</span>
+      </div>
+    </div>
   );
 }

@@ -14,7 +14,7 @@ export default function LoginPage() {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn) {
-      router.push("/patients"); // Redirection si déjà connecté
+      router.push("/"); // Redirection si déjà connecté
     }
   }, []);
 

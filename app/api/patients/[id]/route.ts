@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 
 // Mettre à jour un patient
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  const { id } = params;  // Accès direct à params.id
+  const { id } = params;  // Accès direct à params.id (pas besoin d'attendre ici, Next.js le fait automatiquement)
 
   try {
     // Récupérer le corps de la requête
@@ -16,7 +16,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 
     // Vérification que l'âge est un entier
-    if (isNaN(age)) {
+    if (isNaN(Number(age))) {
       return NextResponse.json({ error: 'L\'âge doit être un entier valide' }, { status: 400 });
     }
 

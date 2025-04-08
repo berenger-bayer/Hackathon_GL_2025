@@ -1,6 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/about/page": "app/about/page.js",
+  "/api/patients/[id]/dossier/route": "app/api/patients/[id]/dossier/route.js",
   "/api/patients/[id]/route": "app/api/patients/[id]/route.js",
   "/api/patients/route": "app/api/patients/route.js",
   "/api/stats/route": "app/api/stats/route.js",
@@ -8,6 +9,7 @@
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
+  "/patients/[id]/completer/page": "app/patients/[id]/completer/page.js",
   "/patients/[id]/route": "app/patients/[id]/route.js",
   "/patients/ajouter/page": "app/patients/ajouter/page.js",
   "/patients/dossier/[id]/page": "app/patients/dossier/[id]/page.js",

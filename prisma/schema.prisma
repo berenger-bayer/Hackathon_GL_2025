@@ -12,5 +12,10 @@ model Patient {
   name       String
   age        Int
   diagnosis  String
+  poids      Float?   // Poids du patient
+  taille     Float?   // Taille du patient
+  traitement String?  // Traitement du patient
+  numSecu    String?  // Numéro de sécurité sociale du patient
+  medecin    String?  // Médecin du patient
   createdAt  DateTime @default(now())
 }
