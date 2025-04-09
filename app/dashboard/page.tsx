@@ -9,6 +9,7 @@ import { PieChart } from "../components/charts/PieChart";
 import { ProgressCircle } from "../components/charts/ProgressCircle";
 import { DataTable } from "../components/charts/DataTable";
 import { CalendarChart } from "../components/charts/CalendarChart";
+import Navbar from "../components/Navbar";
 
 type Stats = {
   totalPatients: number;
@@ -65,6 +66,8 @@ export default function ModernDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Navbar />
+    
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">

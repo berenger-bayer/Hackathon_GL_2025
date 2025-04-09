@@ -11,11 +11,13 @@ model Patient {
   id         String   @id @default(uuid())
   name       String
   age        Int
+  sexe       String?   // Sexe du patient : "Homme" ou "Femme"
   diagnosis  String
-  poids      Float?   // Poids du patient
-  taille     Float?   // Taille du patient
-  traitement String?  // Traitement du patient
-  numSecu    String?  // Numéro de sécurité sociale du patient
-  medecin    String?  // Médecin du patient
-  createdAt  DateTime @default(now())
+  poids      Float?    // Poids du patient
+  taille     Float?    // Taille du patient
+  traitement String?   // Traitement du patient
+  numSecu    String?   // Numéro de sécurité sociale du patient
+  medecin    String?   // Médecin du patient
+  createdAt  DateTime  @default(now())
 }
+

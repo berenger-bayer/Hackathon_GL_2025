@@ -37,16 +37,13 @@ function FicheMedicalePatient() {
                     const data = await res.json();
                     setPatient(data);
                     setLoading(false);
-                    // Si la fiche vient d'être mise à jour, afficher le message de succès
                     if (fromUpdate === 'true') {
                         setShowUpdateSuccess(true);
-                        // Lancer l'impression automatique après 1 seconde
                         setTimeout({
                             "FicheMedicalePatient.useEffect": ()=>{
                                 window.print();
                             }
                         }["FicheMedicalePatient.useEffect"], 1000);
-                        // Masquer le message après 5 secondes
                         setTimeout({
                             "FicheMedicalePatient.useEffect": ()=>{
                                 setShowUpdateSuccess(false);
@@ -72,7 +69,7 @@ function FicheMedicalePatient() {
             children: "Chargement de la fiche médicale..."
         }, void 0, false, {
             fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-            lineNumber: 65,
+            lineNumber: 61,
             columnNumber: 7
         }, this);
     }
@@ -82,12 +79,12 @@ function FicheMedicalePatient() {
             children: error || "Patient introuvable."
         }, void 0, false, {
             fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-            lineNumber: 73,
+            lineNumber: 69,
             columnNumber: 7
         }, this);
     }
     const isEtatCritique = patient.diagnosis?.toLowerCase().includes("critique");
-    const dateCreation = new Date(patient.createdAt).toLocaleDateString();
+    const dateCreation = new Date(patient.createdAt).toLocaleDateString('fr-FR');
     const imc = patient.poids && patient.taille ? (patient.poids / (patient.taille * patient.taille)).toFixed(1) : null;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "bg-gray-100 min-h-screen p-6 text-black",
@@ -97,20 +94,20 @@ function FicheMedicalePatient() {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaCheckCircle"], {}, void 0, false, {
                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                        lineNumber: 88,
+                        lineNumber: 85,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         children: "Fiche médicale mise à jour avec succès ! Préparation de l impression..."
                     }, void 0, false, {
                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                        lineNumber: 89,
+                        lineNumber: 86,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                lineNumber: 87,
+                lineNumber: 84,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -127,14 +124,14 @@ function FicheMedicalePatient() {
                                         className: "mr-2"
                                     }, void 0, false, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 99,
+                                        lineNumber: 96,
                                         columnNumber: 13
                                     }, this),
                                     "Retour à la liste"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 95,
+                                lineNumber: 92,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -148,14 +145,14 @@ function FicheMedicalePatient() {
                                                 className: "mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 108,
+                                                lineNumber: 105,
                                                 columnNumber: 15
                                             }, this),
                                             "Compléter la fiche"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 104,
+                                        lineNumber: 101,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -166,26 +163,26 @@ function FicheMedicalePatient() {
                                                 className: "mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 116,
+                                                lineNumber: 113,
                                                 columnNumber: 15
                                             }, this),
                                             "Imprimer"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 112,
+                                        lineNumber: 109,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 103,
+                                lineNumber: 100,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                        lineNumber: 94,
+                        lineNumber: 91,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -201,20 +198,20 @@ function FicheMedicalePatient() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 124,
+                                        lineNumber: 121,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: "Médecin généraliste"
                                     }, void 0, false, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 125,
+                                        lineNumber: 122,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 123,
+                                lineNumber: 120,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -224,26 +221,26 @@ function FicheMedicalePatient() {
                                         children: "UAC-IFRI-GL-2025"
                                     }, void 0, false, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 128,
+                                        lineNumber: 125,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: "00229 Ab-Calavi"
                                     }, void 0, false, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 129,
+                                        lineNumber: 126,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 127,
+                                lineNumber: 124,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                        lineNumber: 122,
+                        lineNumber: 119,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -254,7 +251,7 @@ function FicheMedicalePatient() {
                                 children: "FICHE MÉDICALE"
                             }, void 0, false, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 134,
+                                lineNumber: 131,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -265,20 +262,20 @@ function FicheMedicalePatient() {
                                         children: "CONFIDENTIEL"
                                     }, void 0, false, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 136,
+                                        lineNumber: 133,
                                         columnNumber: 39
                                     }, this),
                                     "__________________________"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 135,
+                                lineNumber: 132,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                        lineNumber: 133,
+                        lineNumber: 130,
                         columnNumber: 9
                     }, this),
                     isEtatCritique && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -288,7 +285,7 @@ function FicheMedicalePatient() {
                                 className: "text-red-600 mr-2 text-xl"
                             }, void 0, false, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 142,
+                                lineNumber: 139,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -296,13 +293,13 @@ function FicheMedicalePatient() {
                                 children: "ATTENTION : État critique"
                             }, void 0, false, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 143,
+                                lineNumber: 140,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                        lineNumber: 141,
+                        lineNumber: 138,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -316,7 +313,7 @@ function FicheMedicalePatient() {
                                         children: "Informations personnelles"
                                     }, void 0, false, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 149,
+                                        lineNumber: 146,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -330,20 +327,20 @@ function FicheMedicalePatient() {
                                                         children: "Nom complet:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 155,
+                                                        lineNumber: 152,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: patient.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 156,
+                                                        lineNumber: 153,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 154,
+                                                lineNumber: 151,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -354,7 +351,7 @@ function FicheMedicalePatient() {
                                                         children: "Âge:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 159,
+                                                        lineNumber: 156,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -364,14 +361,38 @@ function FicheMedicalePatient() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 160,
+                                                        lineNumber: 157,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 158,
+                                                lineNumber: 155,
                                                 columnNumber: 15
+                                            }, this),
+                                            patient.sexe && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "grid grid-cols-[120px_1fr]",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "font-semibold",
+                                                        children: "Sexe:"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/patients/dossier/[id]/page.tsx",
+                                                        lineNumber: 161,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        children: patient.sexe
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/patients/dossier/[id]/page.tsx",
+                                                        lineNumber: 162,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/patients/dossier/[id]/page.tsx",
+                                                lineNumber: 160,
+                                                columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "grid grid-cols-[120px_1fr]",
@@ -381,20 +402,20 @@ function FicheMedicalePatient() {
                                                         children: "N° Sécu:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 163,
+                                                        lineNumber: 166,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: patient.numSecu || "Non renseigné"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 164,
+                                                        lineNumber: 167,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 162,
+                                                lineNumber: 165,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -405,32 +426,32 @@ function FicheMedicalePatient() {
                                                         children: "Date création:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 167,
+                                                        lineNumber: 170,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: dateCreation
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 168,
+                                                        lineNumber: 171,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 166,
+                                                lineNumber: 169,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 153,
+                                        lineNumber: 150,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 148,
+                                lineNumber: 145,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -441,7 +462,7 @@ function FicheMedicalePatient() {
                                         children: "Informations médicales"
                                     }, void 0, false, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 174,
+                                        lineNumber: 177,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -455,20 +476,20 @@ function FicheMedicalePatient() {
                                                         children: "Taille:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 180,
+                                                        lineNumber: 183,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: patient.taille ? `${patient.taille} m` : "Non renseigné"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 181,
+                                                        lineNumber: 184,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 179,
+                                                lineNumber: 182,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -479,20 +500,20 @@ function FicheMedicalePatient() {
                                                         children: "Poids:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 184,
+                                                        lineNumber: 187,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: patient.poids ? `${patient.poids} kg` : "Non renseigné"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 185,
+                                                        lineNumber: 188,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 183,
+                                                lineNumber: 186,
                                                 columnNumber: 15
                                             }, this),
                                             imc && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -503,7 +524,7 @@ function FicheMedicalePatient() {
                                                         children: "IMC:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 189,
+                                                        lineNumber: 192,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -513,13 +534,13 @@ function FicheMedicalePatient() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 190,
+                                                        lineNumber: 193,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 188,
+                                                lineNumber: 191,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -530,7 +551,7 @@ function FicheMedicalePatient() {
                                                         children: "Diagnostic:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 194,
+                                                        lineNumber: 197,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -542,24 +563,24 @@ function FicheMedicalePatient() {
                                                                     className: "ml-2"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                                    lineNumber: 199,
+                                                                    lineNumber: 202,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                            lineNumber: 197,
+                                                            lineNumber: 200,
                                                             columnNumber: 21
                                                         }, this) : patient.diagnosis
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 195,
+                                                        lineNumber: 198,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 193,
+                                                lineNumber: 196,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -570,38 +591,38 @@ function FicheMedicalePatient() {
                                                         children: "Traitement:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 207,
+                                                        lineNumber: 210,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: patient.traitement || "Non renseigné"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                        lineNumber: 208,
+                                                        lineNumber: 211,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                                lineNumber: 206,
+                                                lineNumber: 209,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 178,
+                                        lineNumber: 181,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 173,
+                                lineNumber: 176,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                        lineNumber: 147,
+                        lineNumber: 144,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -612,7 +633,7 @@ function FicheMedicalePatient() {
                                 children: "Recommandations"
                             }, void 0, false, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 215,
+                                lineNumber: 218,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -623,14 +644,14 @@ function FicheMedicalePatient() {
                                             children: "Suivre scrupuleusement le traitement prescrit."
                                         }, void 0, false, {
                                             fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                            lineNumber: 222,
+                                            lineNumber: 225,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: "En cas d effets secondaires, contactez votre médecin immédiatement."
                                         }, void 0, false, {
                                             fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                            lineNumber: 223,
+                                            lineNumber: 226,
                                             columnNumber: 17
                                         }, this),
                                         isEtatCritique && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -638,13 +659,13 @@ function FicheMedicalePatient() {
                                             children: "Surveillance médicale stricte requise."
                                         }, void 0, false, {
                                             fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                            lineNumber: 225,
+                                            lineNumber: 228,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                    lineNumber: 221,
+                                    lineNumber: 224,
                                     columnNumber: 15
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "flex items-center justify-center py-3 no-print",
@@ -653,23 +674,23 @@ function FicheMedicalePatient() {
                                         children: "Aucune recommandation spécifique."
                                     }, void 0, false, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 232,
+                                        lineNumber: 235,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                    lineNumber: 231,
+                                    lineNumber: 234,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 219,
+                                lineNumber: 222,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                        lineNumber: 214,
+                        lineNumber: 217,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -684,23 +705,23 @@ function FicheMedicalePatient() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 240,
+                                        lineNumber: 243,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: [
                                             "Date édition: ",
-                                            new Date().toLocaleDateString()
+                                            new Date().toLocaleDateString('fr-FR')
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                        lineNumber: 241,
+                                        lineNumber: 244,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 239,
+                                lineNumber: 242,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -709,30 +730,30 @@ function FicheMedicalePatient() {
                                     children: "Document confidentiel - Propriété médicale"
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 247,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                                lineNumber: 243,
+                                lineNumber: 246,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                        lineNumber: 238,
+                        lineNumber: 241,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-                lineNumber: 93,
+                lineNumber: 90,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/patients/dossier/[id]/page.tsx",
-        lineNumber: 85,
+        lineNumber: 82,
         columnNumber: 5
     }, this);
 }

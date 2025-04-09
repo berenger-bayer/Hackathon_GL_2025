@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaHeartbeat, FaUserMd, FaChartLine, FaLightbulb, FaShieldAlt, FaHandsHelping } from "react-icons/fa";
+import Navbar from "../components/Navbar";
 
 const FeatureCard = ({ icon, title, description }) => (
   <motion.div 
@@ -36,6 +37,8 @@ const TeamMember = ({ name, role, img }) => (
 export default function About() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <Navbar />
+    
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-blue-500 to-blue-700 py-20 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -54,7 +57,7 @@ export default function About() {
               AI4CKD combine intelligence artificielle et expertise médicale pour transformer la gestion des patients atteints d insuffisance rénale chronique.
             </p>
             <Link 
-              href="/contact" 
+              href="/" 
               className="inline-block px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition duration-300"
             >
               Nous contacter
@@ -137,8 +140,8 @@ export default function About() {
               className="md:w-1/2 bg-white p-8 rounded-xl shadow-md border border-gray-200"
             >
               <div className="aspect-w-16 aspect-h-9 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center text-gray-400">
-                {/* Remplacez par une illustration ou capture d'écran réelle */}
-                Interface AI4CKD
+                {/*Interface AI4CKD*/}
+                <img src="/ai4ckd-interface.png" alt="AI4CKD Interface" className="w-full h-full object-cover" />
               </div>
             </motion.div>
           </div>
@@ -184,13 +187,13 @@ export default function About() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link 
-                href="/demo" 
+                href="/" 
                 className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition duration-300"
               >
                 Demander une démo
               </Link>
               <Link 
-                href="/contact" 
+                href="/" 
                 className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition duration-300"
               >
                 Parler à un expert
@@ -211,8 +214,8 @@ export default function About() {
             <div className="flex space-x-6">
               <Link href="/" className="hover:text-blue-300 transition">Accueil</Link>
               <Link href="/about" className="hover:text-blue-300 transition">À propos</Link>
-              <Link href="/solutions" className="hover:text-blue-300 transition">Solutions</Link>
-              <Link href="/contact" className="hover:text-blue-300 transition">Contact</Link>
+              <Link href="/" className="hover:text-blue-300 transition">Solutions</Link>
+              <Link href="/" className="hover:text-blue-300 transition">Contact</Link>
             </div>
           </div>
         </div>

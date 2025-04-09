@@ -8,6 +8,7 @@ type Patient = {
   id: string;
   name: string;
   age: number;
+  sexe: string | null;
   diagnosis: string;
   poids: number | null;
   taille: number | null;
@@ -38,16 +39,11 @@ export default function FicheMedicalePatient() {
         setPatient(data);
         setLoading(false);
         
-        // Si la fiche vient d'être mise à jour, afficher le message de succès
         if (fromUpdate === 'true') {
           setShowUpdateSuccess(true);
-          
-          // Lancer l'impression automatique après 1 seconde
           setTimeout(() => {
             window.print();
           }, 1000);
-          
-          // Masquer le message après 5 secondes
           setTimeout(() => {
             setShowUpdateSuccess(false);
           }, 5000);
@@ -77,9 +73,10 @@ export default function FicheMedicalePatient() {
   }
 
   const isEtatCritique = patient.diagnosis?.toLowerCase().includes("critique");
-  const dateCreation = new Date(patient.createdAt).toLocaleDateString();
-  const imc = patient.poids && patient.taille ? 
-    (patient.poids / (patient.taille * patient.taille)).toFixed(1) : null;
+  const dateCreation = new Date(patient.createdAt).toLocaleDateString('fr-FR');
+  const imc = patient.poids && patient.taille 
+    ? (patient.poids / (patient.taille * patient.taille)).toFixed(1)
+    : null;
 
   return (
     <div className="bg-gray-100 min-h-screen p-6 text-black">
@@ -159,6 +156,12 @@ export default function FicheMedicalePatient() {
                 <span className="font-semibold">Âge:</span>
                 <span>{patient.age} ans</span>
               </div>
+              {patient.sexe && (
+                <div className="grid grid-cols-[120px_1fr]">
+                  <span className="font-semibold">Sexe:</span>
+                  <span>{patient.sexe}</span>
+                </div>
+              )}
               <div className="grid grid-cols-[120px_1fr]">
                 <span className="font-semibold">N° Sécu:</span>
                 <span>{patient.numSecu || "Non renseigné"}</span>
@@ -238,7 +241,7 @@ export default function FicheMedicalePatient() {
         <div className="border-t pt-4 flex justify-between text-sm text-gray-600">
           <div>
             <p>ID Patient: {patient.id}</p>
-            <p>Date édition: {new Date().toLocaleDateString()}</p>
+            <p>Date édition: {new Date().toLocaleDateString('fr-FR')}</p>
           </div>
           <div>
             <p className="text-right">Document confidentiel - Propriété médicale</p>

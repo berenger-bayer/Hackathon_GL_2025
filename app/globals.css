@@ -24,31 +24,3 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-@media print {
-  .print-view, .print-view * {
-    visibility: visible;
-  }
-  .print-view {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 20px;
-  }
-  @page {
-    size: A4 portrait;
-    margin: 15mm;
-  }
-  @page {
-    @top-center {
-      content: "Hôpital AI4CKD - Liste des Patients";
-      font-size: 12pt;
-    }
-    @bottom-center {
-      content: "Page " counter(page);
-      font-size: 10pt;
-    }
-  }
-}

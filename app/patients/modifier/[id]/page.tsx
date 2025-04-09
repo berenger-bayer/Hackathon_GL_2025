@@ -100,11 +100,11 @@ export default function CompleterPatientPage() {
   };
 
   const handleCancel = () => {
-    router.push(`/patients/${id}`); // Retour à la fiche médicale du patient
+    router.push(`/patients/dossier/${id}`); // Retour à la fiche médicale du patient
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-100 p-6 text-black">
       <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg">
         <div className="flex items-center justify-between mb-6">
           <button

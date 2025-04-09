@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Navbar from "./components/Navbar";
 
 // Constants
 const CKD_STATS = [
@@ -63,6 +64,8 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col relative">
       
       <main className="flex-grow">
+      <Navbar />
+      
         {/* Hero Section */}
         <section className="py-8 lg:py-20 px-4 sm:px-6">
           <div className="max-w-7xl mx-auto">
@@ -99,10 +102,10 @@ export default function Home() {
                     transition={{ duration: 0.7, delay: 0.4 }}
                   >
                     <Link
-                      href="/about"
+                      href="/patients"
                       className="px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-teal-600 transition text-sm md:text-base text-center"
                     >
-                      Essayer la démo
+                      Demarrer
                     </Link>
                     <Link
                       href="/about"
