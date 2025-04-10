@@ -1,4 +1,4 @@
-(globalThis.TURBOPACK = globalThis.TURBOPACK || []).push(["static/chunks/app_patients_[id]_completer_page_tsx_e1fbfaa8._.js", {
+(globalThis.TURBOPACK = globalThis.TURBOPACK || []).push([typeof document === "object" ? document.currentScript : undefined, {
 
 "[project]/app/patients/[id]/completer/page.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
 "use strict";

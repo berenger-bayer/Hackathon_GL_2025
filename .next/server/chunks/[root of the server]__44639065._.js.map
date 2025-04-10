@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 6, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
-    {"offset": {"line": 68, "column": 0}, "map": {"version":3,"sources":["file:///Users/macuser/Documents/GitHub/Hackathon_GL_2025/app/api/patients/route.ts"],"sourcesContent":["// app/api/patients/route.ts\nimport { NextResponse } from \"next/server\";\nimport { PrismaClient } from \"@prisma/client\";\n\nconst prisma = new PrismaClient();\n\nexport async function GET() {\n  try {\n    const patients = await prisma.patient.findMany();\n    return NextResponse.json(patients); // Retourner les patients\n  } catch (error) {\n    return new NextResponse(\"Erreur lors de la récupération des patients.\", { status: 500 });\n  }\n}\n\n// Assure-toi que ton code gère bien GET et que la route est correcte\n"],"names":[],"mappings":"AAAA,4BAA4B;;;;AAC5B;AACA;;;AAEA,MAAM,SAAS,IAAI,6HAAA,CAAA,eAAY;AAExB,eAAe;IACpB,IAAI;QACF,MAAM,WAAW,MAAM,OAAO,OAAO,CAAC,QAAQ;QAC9C,OAAO,gIAAA,CAAA,eAAY,CAAC,IAAI,CAAC,WAAW,yBAAyB;IAC/D,EAAE,OAAO,OAAO;QACd,OAAO,IAAI,gIAAA,CAAA,eAAY,CAAC,gDAAgD;YAAE,QAAQ;QAAI;IACxF;AACF,EAEA,qEAAqE","debugId":null}}]
-}

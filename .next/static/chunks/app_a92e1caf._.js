@@ -1,4 +1,4 @@
-(globalThis.TURBOPACK = globalThis.TURBOPACK || []).push(["static/chunks/app_a92e1caf._.js", {
+(globalThis.TURBOPACK = globalThis.TURBOPACK || []).push([typeof document === "object" ? document.currentScript : undefined, {
 
 "[project]/app/components/Notification.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
 "use strict";
@@ -431,120 +431,80 @@ function PatientsPage() {
     const [sortAsc, setSortAsc] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [notification, setNotification] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [printMode, setPrintMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [expandedPatient, setExpandedPatient] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
+    const loadPatients = ()=>{
+        fetch("/api/patients").then(async (res)=>{
+            if (!res.ok) throw new Error(`Erreur API: ${res.status}`);
+            const data = await res.json();
+            setPatients(data);
+            const alertes = data.filter((p)=>p.diagnosis?.toLowerCase().includes("critique"));
+            const maintenant = new Date();
+            const dansTroisJours = new Date();
+            dansTroisJours.setDate(maintenant.getDate() + 3);
+            const rappels = data.filter((p)=>{
+                if (!p.rendezvous) return false;
+                const rdv = new Date(p.rendezvous);
+                return rdv >= maintenant && rdv <= dansTroisJours;
+            });
+            if (alertes.length > 0) {
+                setNotification(`⚠️ ${alertes.length} patient(s) en état critique`);
+            } else if (rappels.length > 0) {
+                setNotification(`🔔 ${rappels.length} rendez-vous à venir dans 3 jours`);
+            }
+        }).catch((err)=>{
+            console.error("Erreur chargement patients:", err);
+            setPatients([]);
+        });
+    };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "PatientsPage.useEffect": ()=>{
             const isLoggedIn = localStorage.getItem("isLoggedIn");
             if (!isLoggedIn) {
                 router.push("/login");
+            } else {
+                loadPatients();
             }
         }
     }["PatientsPage.useEffect"], []);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "PatientsPage.useEffect": ()=>{
-            fetch("/api/patients").then({
-                "PatientsPage.useEffect": async (res)=>{
-                    if (!res.ok) throw new Error(`Erreur API: ${res.status}`);
-                    const data = await res.json();
-                    setPatients(data);
-                    const alertes = data.filter({
-                        "PatientsPage.useEffect.alertes": (p)=>p.diagnosis?.toLowerCase().includes("critique")
-                    }["PatientsPage.useEffect.alertes"]);
-                    const maintenant = new Date();
-                    const dansTroisJours = new Date();
-                    dansTroisJours.setDate(maintenant.getDate() + 3);
-                    const rappels = data.filter({
-                        "PatientsPage.useEffect.rappels": (p)=>{
-                            if (!p.rendezvous) return false;
-                            const rdv = new Date(p.rendezvous);
-                            return rdv >= maintenant && rdv <= dansTroisJours;
-                        }
-                    }["PatientsPage.useEffect.rappels"]);
-                    if (alertes.length > 0) {
-                        setNotification(`⚠️ ${alertes.length} patient(s) en état critique`);
-                    } else if (rappels.length > 0) {
-                        setNotification(`🔔 ${rappels.length} rendez-vous à venir dans 3 jours`);
-                    }
-                }
-            }["PatientsPage.useEffect"]).catch({
-                "PatientsPage.useEffect": (err)=>{
-                    console.error("Erreur chargement patients:", err);
-                    setPatients([]);
-                }
-            }["PatientsPage.useEffect"]);
-        }
-    }["PatientsPage.useEffect"], []);
-    const filteredPatients = [
-        ...patients
-    ].filter((patient)=>{
-        const value = patient[filterKey];
-        if (filterKey === "id") {
-            return String(value).includes(search);
-        }
-        return String(value).toLowerCase().includes(search.toLowerCase());
-    }).sort((a, b)=>{
-        if (a[filterKey] < b[filterKey]) return sortAsc ? -1 : 1;
-        if (a[filterKey] > b[filterKey]) return sortAsc ? 1 : -1;
-        return 0;
-    });
     const handleDelete = async (id)=>{
-        const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer ce patient ?");
-        if (confirmDelete) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer ce patient ?")) {
             try {
                 const res = await fetch(`/api/patients/${id}`, {
                     method: "DELETE"
                 });
                 if (!res.ok) throw new Error(`Erreur suppression patient: ${res.status}`);
-                setPatients(patients.filter((p)=>p.id !== id));
+                loadPatients();
+                setNotification("Patient supprimé avec succès");
             } catch (error) {
                 console.error("Erreur suppression patient:", error);
-                alert("Une erreur est survenue lors de la suppression.");
+                setNotification("Erreur lors de la suppression");
             }
         }
     };
     const handlePrint = ()=>{
-        setPrintMode(true);
-        setTimeout(()=>{
-            window.print();
-            setPrintMode(false);
-        }, 100);
+        window.print();
     };
-    const highlightMatch = (text, search)=>{
-        const regex = new RegExp(`(${search})`, "gi");
-        return text.replace(regex, `<mark class="bg-yellow-300">$1</mark>`);
+    const togglePatientExpand = (id)=>{
+        setExpandedPatient(expandedPatient === id ? null : id);
     };
-    const getHighlighted = (key, value)=>{
-        if (value === null) return "-";
-        const text = String(value);
-        if (filterKey === key && search) {
-            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                dangerouslySetInnerHTML: {
-                    __html: highlightMatch(text, search)
-                }
-            }, void 0, false, {
-                fileName: "[project]/app/patients/page.tsx",
-                lineNumber: 125,
-                columnNumber: 9
-            }, this);
+    const filteredPatients = [
+        ...patients
+    ].filter((patient)=>{
+        const value = patient[filterKey];
+        if (value === null || value === undefined) return false;
+        return String(value).toLowerCase().includes(search.toLowerCase());
+    }).sort((a, b)=>{
+        const valueA = a[filterKey];
+        const valueB = b[filterKey];
+        if (valueA === null && valueB === null) return 0;
+        if (valueA === null) return sortAsc ? 1 : -1;
+        if (valueB === null) return sortAsc ? -1 : 1;
+        if (typeof valueA === "string" && typeof valueB === "string") {
+            return sortAsc ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
         }
-        return text;
-    };
-    const displayId = (id)=>{
-        const numericId = parseInt(id.replace(/-/g, "").substring(0, 8), 16) % 1000000;
-        return numericId.toString().padStart(6, "0");
-    };
-    const formatDate = (dateString)=>{
-        if (!dateString) return "-";
-        const date = new Date(dateString);
-        return date.toLocaleDateString("fr-FR", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-        });
-    };
-    // Calculer l'IMC pour chaque patient
+        return sortAsc ? valueA - valueB : valueB - valueA;
+    });
     const calculateIMC = (poids, taille)=>{
         if (!poids || !taille) return {
             value: null,
@@ -573,19 +533,113 @@ function PatientsPage() {
             color
         };
     };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: `min-h-screen ${printMode ? "bg-white" : "bg-gradient-to-br from-blue-50 to-indigo-50"}`,
-        children: [
-            !printMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$Navbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+    const formatDate = (dateString)=>{
+        if (!dateString) return "-";
+        const date = new Date(dateString);
+        return date.toLocaleDateString("fr-FR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    };
+    const renderSexe = (sexe)=>{
+        switch(sexe?.toUpperCase()){
+            case 'M':
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    className: "flex items-center text-blue-600",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaMars"], {
+                            className: "mr-1 print:hidden"
+                        }, void 0, false, {
+                            fileName: "[project]/app/patients/page.tsx",
+                            lineNumber: 170,
+                            columnNumber: 66
+                        }, this),
+                        " Masculin"
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/app/patients/page.tsx",
+                    lineNumber: 170,
+                    columnNumber: 16
+                }, this);
+            case 'F':
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    className: "flex items-center text-pink-600",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaVenus"], {
+                            className: "mr-1 print:hidden"
+                        }, void 0, false, {
+                            fileName: "[project]/app/patients/page.tsx",
+                            lineNumber: 172,
+                            columnNumber: 66
+                        }, this),
+                        " Féminin"
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/app/patients/page.tsx",
+                    lineNumber: 172,
+                    columnNumber: 16
+                }, this);
+            case 'AUTRE':
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    className: "flex items-center text-purple-600",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaTransgender"], {
+                            className: "mr-1 print:hidden"
+                        }, void 0, false, {
+                            fileName: "[project]/app/patients/page.tsx",
+                            lineNumber: 174,
+                            columnNumber: 68
+                        }, this),
+                        " Autre"
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/app/patients/page.tsx",
+                    lineNumber: 174,
+                    columnNumber: 16
+                }, this);
+            default:
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    className: "text-gray-500",
+                    children: "Non spécifié"
+                }, void 0, false, {
+                    fileName: "[project]/app/patients/page.tsx",
+                    lineNumber: 176,
+                    columnNumber: 16
+                }, this);
+        }
+    };
+    const getHighlighted = (key, value)=>{
+        if (value === null) return "-";
+        const text = String(value);
+        if (filterKey === key && search) {
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                dangerouslySetInnerHTML: {
+                    __html: text.replace(new RegExp(`(${search})`, "gi"), `<mark class="bg-yellow-300">$1</mark>`)
+                }
+            }, void 0, false, {
                 fileName: "[project]/app/patients/page.tsx",
-                lineNumber: 179,
-                columnNumber: 22
+                lineNumber: 185,
+                columnNumber: 9
+            }, this);
+        }
+        return text;
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$Navbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                fileName: "[project]/app/patients/page.tsx",
+                lineNumber: 200,
+                columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "jsx-89dcd0080f1391ba" + " " + "container mx-auto px-4 py-8 print:px-0 print:py-0",
+                className: "jsx-2e28b2bf884cd88d" + " " + "container mx-auto px-4 py-8 text-black",
                 children: [
-                    !printMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
-                        className: "flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4",
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
+                        className: "flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 print:hidden",
                         initial: {
                             opacity: 0,
                             y: -20
@@ -599,109 +653,221 @@ function PatientsPage() {
                         },
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "jsx-89dcd0080f1391ba",
+                                className: "jsx-2e28b2bf884cd88d",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                        className: "jsx-89dcd0080f1391ba" + " " + "text-3xl font-bold text-indigo-700 print:text-black",
+                                        className: "jsx-2e28b2bf884cd88d" + " " + "text-3xl font-bold text-indigo-700",
                                         children: "Gestion des Patients"
                                     }, void 0, false, {
                                         fileName: "[project]/app/patients/page.tsx",
-                                        lineNumber: 190,
-                                        columnNumber: 15
+                                        lineNumber: 210,
+                                        columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "jsx-89dcd0080f1391ba" + " " + "text-gray-500 mt-1 text-lg print:text-black",
+                                        className: "jsx-2e28b2bf884cd88d" + " " + "text-gray-500 mt-1 text-lg",
                                         children: [
                                             filteredPatients.length,
                                             " patient(s) trouvé(s)"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/page.tsx",
-                                        lineNumber: 193,
-                                        columnNumber: 15
+                                        lineNumber: 213,
+                                        columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/page.tsx",
-                                lineNumber: 189,
-                                columnNumber: 13
+                                lineNumber: 209,
+                                columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "jsx-89dcd0080f1391ba" + " " + "flex flex-wrap gap-3 w-full md:w-auto",
+                                className: "jsx-2e28b2bf884cd88d" + " " + "flex flex-wrap gap-3 w-full md:w-auto",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         onClick: ()=>router.push("/patients/ajouter"),
-                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white px-4 py-2 rounded-lg transition text-lg print:hidden shadow-md",
+                                        className: "jsx-2e28b2bf884cd88d" + " " + "flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white px-4 py-2 rounded-lg transition text-lg shadow-md",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaPlus"], {}, void 0, false, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 203,
-                                                columnNumber: 17
+                                                lineNumber: 223,
+                                                columnNumber: 15
                                             }, this),
                                             " Nouveau patient"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/page.tsx",
-                                        lineNumber: 199,
-                                        columnNumber: 15
+                                        lineNumber: 219,
+                                        columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         onClick: handlePrint,
-                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition text-lg print:hidden shadow-md",
+                                        className: "jsx-2e28b2bf884cd88d" + " " + "flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition text-lg shadow-md",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaPrint"], {}, void 0, false, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 209,
-                                                columnNumber: 17
+                                                lineNumber: 229,
+                                                columnNumber: 15
                                             }, this),
                                             " Imprimer"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/page.tsx",
-                                        lineNumber: 205,
-                                        columnNumber: 15
+                                        lineNumber: 225,
+                                        columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/page.tsx",
-                                lineNumber: 198,
-                                columnNumber: 13
+                                lineNumber: 218,
+                                columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/page.tsx",
-                        lineNumber: 183,
-                        columnNumber: 11
+                        lineNumber: 203,
+                        columnNumber: 9
                     }, this),
-                    printMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "jsx-89dcd0080f1391ba" + " " + "print-header p-4 border-b mb-4",
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "jsx-2e28b2bf884cd88d" + " " + "hidden print:block print-header p-4 border-b mb-4",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                className: "jsx-89dcd0080f1391ba" + " " + "text-2xl font-bold text-center",
+                                className: "jsx-2e28b2bf884cd88d" + " " + "text-2xl font-bold text-center",
                                 children: "Liste des Patients"
                             }, void 0, false, {
                                 fileName: "[project]/app/patients/page.tsx",
-                                lineNumber: 217,
-                                columnNumber: 13
+                                lineNumber: 236,
+                                columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "jsx-89dcd0080f1391ba" + " " + "text-center text-gray-600",
+                                className: "jsx-2e28b2bf884cd88d" + " " + "text-center text-gray-600",
                                 children: [
                                     "Généré le ",
                                     new Date().toLocaleDateString("fr-FR")
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/page.tsx",
-                                lineNumber: 218,
-                                columnNumber: 13
+                                lineNumber: 237,
+                                columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/page.tsx",
-                        lineNumber: 216,
-                        columnNumber: 11
+                        lineNumber: 235,
+                        columnNumber: 9
                     }, this),
-                    !printMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "jsx-2e28b2bf884cd88d" + " " + "hidden print:block mb-8",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
+                            className: "jsx-2e28b2bf884cd88d" + " " + "w-full border-collapse",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
+                                    className: "jsx-2e28b2bf884cd88d",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                                        className: "jsx-2e28b2bf884cd88d" + " " + "border-b-2 border-gray-800",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "jsx-2e28b2bf884cd88d" + " " + "py-2 px-4 text-left",
+                                                children: "ID"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/patients/page.tsx",
+                                                lineNumber: 247,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "jsx-2e28b2bf884cd88d" + " " + "py-2 px-4 text-left",
+                                                children: "Nom"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/patients/page.tsx",
+                                                lineNumber: 248,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "jsx-2e28b2bf884cd88d" + " " + "py-2 px-4 text-left",
+                                                children: "Sexe"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/patients/page.tsx",
+                                                lineNumber: 249,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "jsx-2e28b2bf884cd88d" + " " + "py-2 px-4 text-left",
+                                                children: "Diagnostic"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/patients/page.tsx",
+                                                lineNumber: 250,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/patients/page.tsx",
+                                        lineNumber: 246,
+                                        columnNumber: 15
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/app/patients/page.tsx",
+                                    lineNumber: 245,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
+                                    className: "jsx-2e28b2bf884cd88d",
+                                    children: filteredPatients.map((patient)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                                            className: "jsx-2e28b2bf884cd88d" + " " + "border-b border-gray-200",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "jsx-2e28b2bf884cd88d" + " " + "py-2 px-4",
+                                                    children: patient.id
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/patients/page.tsx",
+                                                    lineNumber: 256,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "jsx-2e28b2bf884cd88d" + " " + "py-2 px-4",
+                                                    children: patient.name
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/patients/page.tsx",
+                                                    lineNumber: 257,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "jsx-2e28b2bf884cd88d" + " " + "py-2 px-4",
+                                                    children: patient.sexe === 'M' ? 'Masculin' : patient.sexe === 'F' ? 'Féminin' : patient.sexe === 'Autre' ? 'Autre' : 'Non spécifié'
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/patients/page.tsx",
+                                                    lineNumber: 258,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "jsx-2e28b2bf884cd88d" + " " + "py-2 px-4",
+                                                    children: patient.diagnosis || '-'
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/patients/page.tsx",
+                                                    lineNumber: 263,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, patient.id, true, {
+                                            fileName: "[project]/app/patients/page.tsx",
+                                            lineNumber: 255,
+                                            columnNumber: 17
+                                        }, this))
+                                }, void 0, false, {
+                                    fileName: "[project]/app/patients/page.tsx",
+                                    lineNumber: 253,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/app/patients/page.tsx",
+                            lineNumber: 244,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/app/patients/page.tsx",
+                        lineNumber: 243,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
                         className: "bg-white rounded-xl shadow-lg p-6 mb-6 print:hidden",
                         initial: {
                             opacity: 0,
@@ -716,204 +882,195 @@ function PatientsPage() {
                             delay: 0.1
                         },
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "jsx-89dcd0080f1391ba" + " " + "grid grid-cols-1 md:grid-cols-3 gap-4",
+                            className: "jsx-2e28b2bf884cd88d" + " " + "grid grid-cols-1 md:grid-cols-3 gap-4",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "jsx-89dcd0080f1391ba" + " " + "relative",
+                                    className: "jsx-2e28b2bf884cd88d" + " " + "relative",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "jsx-89dcd0080f1391ba" + " " + "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none",
+                                            className: "jsx-2e28b2bf884cd88d" + " " + "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none",
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaSearch"], {
                                                 className: "text-gray-400"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 234,
-                                                columnNumber: 19
+                                                lineNumber: 279,
+                                                columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 233,
-                                            columnNumber: 17
+                                            lineNumber: 278,
+                                            columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                             type: "text",
                                             placeholder: `Rechercher...`,
                                             value: search,
                                             onChange: (e)=>setSearch(e.target.value),
-                                            className: "jsx-89dcd0080f1391ba" + " " + "pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg text-black shadow-sm"
+                                            className: "jsx-2e28b2bf884cd88d" + " " + "pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg text-black shadow-sm"
                                         }, void 0, false, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 236,
-                                            columnNumber: 17
+                                            lineNumber: 281,
+                                            columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 232,
-                                    columnNumber: 15
+                                    lineNumber: 277,
+                                    columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "jsx-89dcd0080f1391ba" + " " + "relative",
+                                    className: "jsx-2e28b2bf884cd88d" + " " + "relative",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "jsx-89dcd0080f1391ba" + " " + "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none",
+                                            className: "jsx-2e28b2bf884cd88d" + " " + "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none",
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaFilter"], {
                                                 className: "text-gray-400"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 247,
-                                                columnNumber: 19
+                                                lineNumber: 292,
+                                                columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 246,
-                                            columnNumber: 17
+                                            lineNumber: 291,
+                                            columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                                             value: filterKey,
                                             onChange: (e)=>setFilterKey(e.target.value),
-                                            className: "jsx-89dcd0080f1391ba" + " " + "pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg text-black shadow-sm",
+                                            className: "jsx-2e28b2bf884cd88d" + " " + "pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg text-black shadow-sm",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "id",
-                                                    className: "jsx-89dcd0080f1391ba",
-                                                    children: "ID"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 254,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "name",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "Nom"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 255,
-                                                    columnNumber: 19
+                                                    lineNumber: 299,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "age",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "Âge"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 256,
-                                                    columnNumber: 19
+                                                    lineNumber: 300,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "sexe",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "Sexe"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 257,
-                                                    columnNumber: 19
+                                                    lineNumber: 301,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "diagnosis",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "Diagnostic"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 258,
-                                                    columnNumber: 19
+                                                    lineNumber: 302,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "medecin",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "Médecin"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 259,
-                                                    columnNumber: 19
+                                                    lineNumber: 303,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "numSecu",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "N° Sécurité Sociale"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 260,
-                                                    columnNumber: 19
+                                                    lineNumber: 304,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "traitement",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "Traitement"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 261,
-                                                    columnNumber: 19
+                                                    lineNumber: 305,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "groupeSanguin",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "Groupe sanguin"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 262,
-                                                    columnNumber: 19
+                                                    lineNumber: 306,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "allergies",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "Allergies"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 263,
-                                                    columnNumber: 19
+                                                    lineNumber: 307,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "rendezvous",
-                                                    className: "jsx-89dcd0080f1391ba",
+                                                    className: "jsx-2e28b2bf884cd88d",
                                                     children: "Prochain RDV"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 264,
-                                                    columnNumber: 19
+                                                    lineNumber: 308,
+                                                    columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 249,
-                                            columnNumber: 17
+                                            lineNumber: 294,
+                                            columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 245,
-                                    columnNumber: 15
+                                    lineNumber: 290,
+                                    columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>setSortAsc(!sortAsc),
-                                    className: "jsx-89dcd0080f1391ba" + " " + "flex items-center justify-center gap-2 w-full p-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition text-lg text-black shadow-sm",
+                                    className: "jsx-2e28b2bf884cd88d" + " " + "flex items-center justify-center gap-2 w-full p-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition text-lg text-black shadow-sm",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaSort"], {}, void 0, false, {
                                             fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 272,
-                                            columnNumber: 17
+                                            lineNumber: 316,
+                                            columnNumber: 15
                                         }, this),
                                         sortAsc ? "Croissant" : "Décroissant"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/patients/page.tsx",
-                                    lineNumber: 268,
-                                    columnNumber: 15
+                                    lineNumber: 312,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/patients/page.tsx",
-                            lineNumber: 231,
-                            columnNumber: 13
+                            lineNumber: 276,
+                            columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/patients/page.tsx",
-                        lineNumber: 225,
-                        columnNumber: 11
+                        lineNumber: 270,
+                        columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
-                        className: `${printMode ? "" : "bg-white rounded-xl shadow-lg"} overflow-hidden`,
+                        className: "bg-white rounded-xl shadow-lg overflow-hidden print:shadow-none print:rounded-none",
                         initial: {
                             opacity: 0,
                             y: -10
@@ -927,559 +1084,655 @@ function PatientsPage() {
                             delay: 0.2
                         },
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "jsx-89dcd0080f1391ba" + " " + "overflow-x-auto print:overflow-visible",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
-                                className: "jsx-89dcd0080f1391ba" + " " + "min-w-full divide-y divide-gray-200 print:w-full",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
-                                        className: "jsx-89dcd0080f1391ba" + " " + `${printMode ? "" : "bg-gradient-to-r from-blue-50 to-indigo-50"}`,
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                            className: "jsx-89dcd0080f1391ba",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: "ID"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 289,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: "Nom"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 292,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: "Âge/Sexe"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 295,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: "Diagnostic"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 298,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center",
+                            className: "jsx-2e28b2bf884cd88d" + " " + "overflow-x-auto print:hidden",
+                            children: filteredPatients.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "jsx-2e28b2bf884cd88d" + " " + "p-8 text-center text-gray-500",
+                                children: "Aucun patient trouvé. Essayez de modifier vos critères de recherche."
+                            }, void 0, false, {
+                                fileName: "[project]/app/patients/page.tsx",
+                                lineNumber: 330,
+                                columnNumber: 15
+                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "jsx-2e28b2bf884cd88d" + " " + "space-y-4 p-4",
+                                children: filteredPatients.map((patient)=>{
+                                    const imc = calculateIMC(patient.poids, patient.taille);
+                                    const isExpanded = expandedPatient === patient.id;
+                                    const isCritical = patient.diagnosis?.toLowerCase().includes("critique");
+                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "jsx-2e28b2bf884cd88d" + " " + `border rounded-lg overflow-hidden transition-all duration-300 ${isCritical ? "border-red-200 bg-red-50" : "border-gray-200"}`,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                onClick: ()=>togglePatientExpand(patient.id),
+                                                className: "jsx-2e28b2bf884cd88d" + " " + `p-4 cursor-pointer flex justify-between items-center ${isCritical ? "bg-red-100" : "bg-gray-50"}`,
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "jsx-2e28b2bf884cd88d" + " " + "flex items-center space-x-4",
                                                         children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaWeight"], {
-                                                                className: "mr-1"
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + `w-12 h-12 rounded-full flex items-center justify-center ${isCritical ? "bg-red-200 text-red-700" : "bg-blue-100 text-blue-700"}`,
+                                                                children: patient.name.charAt(0).toUpperCase()
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/patients/page.tsx",
-                                                                lineNumber: 303,
-                                                                columnNumber: 23
+                                                                lineNumber: 350,
+                                                                columnNumber: 27
                                                             }, this),
-                                                            " / ",
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaRulerVertical"], {
-                                                                className: "ml-1"
-                                                            }, void 0, false, {
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "jsx-2e28b2bf884cd88d",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                        className: "jsx-2e28b2bf884cd88d" + " " + "font-bold text-lg",
+                                                                        children: [
+                                                                            patient.name,
+                                                                            isCritical && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaExclamationTriangle"], {
+                                                                                className: "ml-2 inline text-red-600"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 356,
+                                                                                columnNumber: 46
+                                                                            }, this)
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 354,
+                                                                        columnNumber: 29
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d" + " " + "flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d",
+                                                                                children: [
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaBirthdayCake"], {
+                                                                                        className: "inline mr-1"
+                                                                                    }, void 0, false, {
+                                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                                        lineNumber: 359,
+                                                                                        columnNumber: 37
+                                                                                    }, this),
+                                                                                    " ",
+                                                                                    patient.age,
+                                                                                    " ans"
+                                                                                ]
+                                                                            }, void 0, true, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 359,
+                                                                                columnNumber: 31
+                                                                            }, this),
+                                                                            renderSexe(patient.sexe),
+                                                                            patient.groupeSanguin && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d",
+                                                                                children: [
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaHeartbeat"], {
+                                                                                        className: "inline mr-1"
+                                                                                    }, void 0, false, {
+                                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                                        lineNumber: 362,
+                                                                                        columnNumber: 39
+                                                                                    }, this),
+                                                                                    " ",
+                                                                                    patient.groupeSanguin
+                                                                                ]
+                                                                            }, void 0, true, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 362,
+                                                                                columnNumber: 33
+                                                                            }, this)
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 358,
+                                                                        columnNumber: 29
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
                                                                 fileName: "[project]/app/patients/page.tsx",
-                                                                lineNumber: 303,
-                                                                columnNumber: 55
+                                                                lineNumber: 353,
+                                                                columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 302,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 301,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: "IMC"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 306,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaUserMd"], {
-                                                            className: "mr-1",
-                                                            title: "Médecin traitant"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 311,
-                                                            columnNumber: 23
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 310,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 309,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaIdCard"], {
-                                                            className: "mr-1",
-                                                            title: "N° Sécurité Sociale"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 316,
-                                                            columnNumber: 23
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 315,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 314,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaPills"], {
-                                                            className: "mr-1",
-                                                            title: "Traitement"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 321,
-                                                            columnNumber: 23
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 320,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 319,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaCalendarAlt"], {
-                                                            className: "mr-1",
-                                                            title: "Prochain RDV"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 326,
-                                                            columnNumber: 23
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 325,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 324,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaHeartbeat"], {
-                                                            className: "mr-1",
-                                                            title: "Groupe sanguin"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 331,
-                                                            columnNumber: 23
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 330,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 329,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaAllergies"], {
-                                                            className: "mr-1",
-                                                            title: "Allergies"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 336,
-                                                            columnNumber: 23
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 335,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 334,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-left text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "flex items-center",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaNotesMedical"], {
-                                                            className: "mr-1",
-                                                            title: "Notes"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 341,
-                                                            columnNumber: 23
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 340,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 339,
-                                                    columnNumber: 19
-                                                }, this),
-                                                !printMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 text-right text-lg font-medium text-blue-700 uppercase tracking-wider print:text-black print:border-b no-print",
-                                                    children: "Actions"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/patients/page.tsx",
-                                                    lineNumber: 345,
-                                                    columnNumber: 21
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/app/patients/page.tsx",
-                                            lineNumber: 288,
-                                            columnNumber: 17
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/patients/page.tsx",
-                                        lineNumber: 287,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                                        className: "jsx-89dcd0080f1391ba" + " " + "bg-white divide-y divide-gray-200",
-                                        children: filteredPatients.map((patient)=>{
-                                            const imc = calculateIMC(patient.poids, patient.taille);
-                                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                                className: "jsx-89dcd0080f1391ba" + " " + "hover:bg-gray-50 transition print:border-b",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-900 print:border-b",
-                                                        children: displayId(patient.id)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 356,
-                                                        columnNumber: 23
+                                                        lineNumber: 349,
+                                                        columnNumber: 25
                                                     }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: getHighlighted("name", patient.name)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 359,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "jsx-2e28b2bf884cd88d" + " " + "text-right",
                                                         children: [
-                                                            getHighlighted("age", patient.age),
-                                                            " / ",
-                                                            getHighlighted("sexe", patient.sexe || "-")
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                children: patient.diagnosis
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 368,
+                                                                columnNumber: 27
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "text-sm text-gray-500",
+                                                                children: patient.rendezvous ? formatDate(patient.rendezvous) : "Pas de RDV"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 369,
+                                                                columnNumber: 27
+                                                            }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 362,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "jsx-89dcd0080f1391ba" + " " + "flex items-center",
-                                                            children: [
-                                                                getHighlighted("diagnosis", patient.diagnosis),
-                                                                patient.diagnosis?.toLowerCase().includes("critique") && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaExclamationTriangle"], {
-                                                                    className: "ml-2 text-red-500 print:text-black"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/app/patients/page.tsx",
-                                                                    lineNumber: 369,
-                                                                    columnNumber: 29
-                                                                }, this)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 366,
-                                                            columnNumber: 25
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 365,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: [
-                                                            patient.poids ? `${patient.poids} kg` : "-",
-                                                            " /",
-                                                            " ",
-                                                            patient.taille ? `${patient.taille} m` : "-"
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 373,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg print:border-b",
-                                                        children: imc.value ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: "jsx-89dcd0080f1391ba" + " " + `font-medium ${imc.color}`,
-                                                            children: [
-                                                                imc.value,
-                                                                " ",
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: "jsx-89dcd0080f1391ba" + " " + "text-xs font-normal",
-                                                                    children: [
-                                                                        "(",
-                                                                        imc.status,
-                                                                        ")"
-                                                                    ]
-                                                                }, void 0, true, {
-                                                                    fileName: "[project]/app/patients/page.tsx",
-                                                                    lineNumber: 380,
-                                                                    columnNumber: 41
-                                                                }, this)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 379,
-                                                            columnNumber: 27
-                                                        }, this) : "-"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 377,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: getHighlighted("medecin", patient.medecin || "-")
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 384,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: getHighlighted("numSecu", patient.numSecu || "-")
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 387,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: patient.traitement ? patient.traitement.length > 20 ? `${patient.traitement.substring(0, 20)}...` : patient.traitement : "-"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 390,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: formatDate(patient.rendezvous)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 397,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: getHighlighted("groupeSanguin", patient.groupeSanguin || "-")
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 400,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: getHighlighted("allergies", patient.allergies || "-")
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 403,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-lg text-gray-500 print:border-b",
-                                                        children: patient.notes ? patient.notes.length > 20 ? `${patient.notes.substring(0, 20)}...` : patient.notes : "-"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 406,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    !printMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "jsx-89dcd0080f1391ba" + " " + "px-6 py-4 whitespace-nowrap text-right text-lg font-medium no-print",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "jsx-89dcd0080f1391ba" + " " + "flex justify-end space-x-2",
-                                                            children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                    onClick: ()=>router.push(`/patients/dossier/${patient.id}`),
-                                                                    title: "Voir",
-                                                                    className: "jsx-89dcd0080f1391ba" + " " + "text-blue-600 hover:text-blue-900 p-2 rounded-full hover:bg-blue-50 transition",
-                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaEye"], {
-                                                                        size: 18
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/app/patients/page.tsx",
-                                                                        lineNumber: 421,
-                                                                        columnNumber: 31
-                                                                    }, this)
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/app/patients/page.tsx",
-                                                                    lineNumber: 416,
-                                                                    columnNumber: 29
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                    onClick: ()=>router.push(`/patients/modifier/${patient.id}`),
-                                                                    title: "Modifier",
-                                                                    className: "jsx-89dcd0080f1391ba" + " " + "text-yellow-600 hover:text-yellow-900 p-2 rounded-full hover:bg-yellow-50 transition",
-                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaEdit"], {
-                                                                        size: 18
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/app/patients/page.tsx",
-                                                                        lineNumber: 428,
-                                                                        columnNumber: 31
-                                                                    }, this)
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/app/patients/page.tsx",
-                                                                    lineNumber: 423,
-                                                                    columnNumber: 29
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                    onClick: ()=>handleDelete(patient.id),
-                                                                    title: "Supprimer",
-                                                                    className: "jsx-89dcd0080f1391ba" + " " + "text-red-600 hover:text-red-900 p-2 rounded-full hover:bg-red-50 transition",
-                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaTrash"], {
-                                                                        size: 18
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/app/patients/page.tsx",
-                                                                        lineNumber: 435,
-                                                                        columnNumber: 31
-                                                                    }, this)
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/app/patients/page.tsx",
-                                                                    lineNumber: 430,
-                                                                    columnNumber: 29
-                                                                }, this)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/app/patients/page.tsx",
-                                                            lineNumber: 415,
-                                                            columnNumber: 27
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/patients/page.tsx",
-                                                        lineNumber: 414,
+                                                        lineNumber: 367,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
-                                            }, patient.id, true, {
+                                            }, void 0, true, {
                                                 fileName: "[project]/app/patients/page.tsx",
-                                                lineNumber: 355,
-                                                columnNumber: 21
-                                            }, this);
-                                        })
-                                    }, void 0, false, {
+                                                lineNumber: 345,
+                                                columnNumber: 23
+                                            }, this),
+                                            isExpanded && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "jsx-2e28b2bf884cd88d" + " " + "p-4 border-t grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "jsx-2e28b2bf884cd88d" + " " + "space-y-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-semibold text-blue-700 flex items-center",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaNotesMedical"], {
+                                                                        className: "mr-2"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 379,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    " Informations médicales"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 378,
+                                                                columnNumber: 29
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "space-y-1 text-sm",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Sexe:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 383,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            renderSexe(patient.sexe)
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 382,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Diagnostic:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 386,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.diagnosis || "-"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 385,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Traitement:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 389,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.traitement || "-"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 388,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Allergies:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 392,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.allergies || "Aucune"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 391,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Notes:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 395,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.notes || "-"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 394,
+                                                                        columnNumber: 31
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 381,
+                                                                columnNumber: 29
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/patients/page.tsx",
+                                                        lineNumber: 377,
+                                                        columnNumber: 27
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "jsx-2e28b2bf884cd88d" + " " + "space-y-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-semibold text-blue-700 flex items-center",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaWeight"], {
+                                                                        className: "mr-2"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 402,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    " Détails physiques"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 401,
+                                                                columnNumber: 29
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "space-y-1 text-sm",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Poids:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 406,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.poids ? `${patient.poids} kg` : "-"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 405,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Taille:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 409,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.taille ? `${patient.taille} m` : "-"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 408,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "IMC:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 412,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            imc.value ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + `font-medium ${imc.color}`,
+                                                                                children: [
+                                                                                    imc.value,
+                                                                                    " ",
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                        className: "jsx-2e28b2bf884cd88d" + " " + "text-xs font-normal",
+                                                                                        children: [
+                                                                                            "(",
+                                                                                            imc.status,
+                                                                                            ")"
+                                                                                        ]
+                                                                                    }, void 0, true, {
+                                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                                        lineNumber: 415,
+                                                                                        columnNumber: 49
+                                                                                    }, this)
+                                                                                ]
+                                                                            }, void 0, true, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 414,
+                                                                                columnNumber: 35
+                                                                            }, this) : "-"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 411,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Groupe sanguin:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 420,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.groupeSanguin || "-"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 419,
+                                                                        columnNumber: 31
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 404,
+                                                                columnNumber: 29
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/patients/page.tsx",
+                                                        lineNumber: 400,
+                                                        columnNumber: 27
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "jsx-2e28b2bf884cd88d" + " " + "space-y-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-semibold text-blue-700 flex items-center",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaIdCard"], {
+                                                                        className: "mr-2"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 427,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    " Informations administratives"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 426,
+                                                                columnNumber: 29
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "space-y-1 text-sm",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "ID:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 431,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.id
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 430,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "N° Sécurité Sociale:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 434,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.numSecu || "-"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 433,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Médecin traitant:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 437,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            patient.medecin || "-"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 436,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Prochain RDV:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 440,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            formatDate(patient.rendezvous)
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 439,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "jsx-2e28b2bf884cd88d",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "jsx-2e28b2bf884cd88d" + " " + "font-medium",
+                                                                                children: "Date création:"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                                lineNumber: 443,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            " ",
+                                                                            formatDate(patient.createdAt)
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 442,
+                                                                        columnNumber: 31
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 429,
+                                                                columnNumber: 29
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/patients/page.tsx",
+                                                        lineNumber: 425,
+                                                        columnNumber: 27
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "jsx-2e28b2bf884cd88d" + " " + "md:col-span-3 flex justify-end space-x-2 pt-4 border-t",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                onClick: ()=>router.push(`/patients/dossier/${patient.id}`),
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaEye"], {}, void 0, false, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 453,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    " Voir dossier"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 449,
+                                                                columnNumber: 29
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                onClick: ()=>router.push(`/patients/modifier/${patient.id}`),
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded transition",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaEdit"], {}, void 0, false, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 459,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    " Modifier"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 455,
+                                                                columnNumber: 29
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                onClick: ()=>handleDelete(patient.id),
+                                                                className: "jsx-2e28b2bf884cd88d" + " " + "flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaTrash"], {}, void 0, false, {
+                                                                        fileName: "[project]/app/patients/page.tsx",
+                                                                        lineNumber: 465,
+                                                                        columnNumber: 31
+                                                                    }, this),
+                                                                    " Supprimer"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/patients/page.tsx",
+                                                                lineNumber: 461,
+                                                                columnNumber: 29
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/patients/page.tsx",
+                                                        lineNumber: 448,
+                                                        columnNumber: 27
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/patients/page.tsx",
+                                                lineNumber: 376,
+                                                columnNumber: 25
+                                            }, this)
+                                        ]
+                                    }, patient.id, true, {
                                         fileName: "[project]/app/patients/page.tsx",
-                                        lineNumber: 351,
-                                        columnNumber: 15
-                                    }, this)
-                                ]
-                            }, void 0, true, {
+                                        lineNumber: 341,
+                                        columnNumber: 21
+                                    }, this);
+                                })
+                            }, void 0, false, {
                                 fileName: "[project]/app/patients/page.tsx",
-                                lineNumber: 286,
-                                columnNumber: 13
+                                lineNumber: 334,
+                                columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/patients/page.tsx",
-                            lineNumber: 285,
+                            lineNumber: 328,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/patients/page.tsx",
-                        lineNumber: 279,
+                        lineNumber: 322,
                         columnNumber: 9
                     }, this),
-                    filteredPatients.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
-                        className: "bg-white rounded-xl shadow-lg p-8 text-center mt-6",
-                        initial: {
-                            opacity: 0
-                        },
-                        animate: {
-                            opacity: 1
-                        },
-                        transition: {
-                            duration: 0.5
-                        },
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "jsx-89dcd0080f1391ba" + " " + "text-gray-500 text-lg",
-                            children: "Aucun patient trouvé. Essayez de modifier vos critères de recherche."
-                        }, void 0, false, {
-                            fileName: "[project]/app/patients/page.tsx",
-                            lineNumber: 455,
-                            columnNumber: 13
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/app/patients/page.tsx",
-                        lineNumber: 449,
-                        columnNumber: 11
-                    }, this),
-                    notification && !printMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$Notification$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                    notification && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$components$2f$Notification$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                         message: notification,
                         onClose: ()=>setNotification("")
                     }, void 0, false, {
                         fileName: "[project]/app/patients/page.tsx",
-                        lineNumber: 462,
+                        lineNumber: 479,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                        id: "89dcd0080f1391ba",
-                        children: "@media print{body{background:#fff;font-size:12pt}.no-print{display:none!important}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ddd;padding:8px 12px}th{text-align:left;background-color:#f5f5f5}.print-header{border-bottom:2px solid #000;margin-bottom:20px;padding-bottom:10px}}"
+                        id: "2e28b2bf884cd88d",
+                        children: "@media print{body{color:#000;font-size:12pt;background:#fff!important}.print\\\\:hidden{display:none!important}.hidden.print\\\\:block{display:block!important}.print-header{border-bottom:2px solid #000;margin-bottom:20px;padding-bottom:10px}table{border-collapse:collapse;width:100%}th{text-align:left;border-bottom:1px solid #000;padding:8px;font-weight:700}td{border-bottom:1px solid #ddd;padding:8px}tr:nth-child(2n){background-color:#f9f9f9}}"
                     }, void 0, false, void 0, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/patients/page.tsx",
-                lineNumber: 181,
+                lineNumber: 202,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/patients/page.tsx",
-        lineNumber: 178,
+        lineNumber: 199,
         columnNumber: 5
     }, this);
 }
-_s(PatientsPage, "SdR13l1RSPaYk0FhbbMvaNhPIH4=", false, function() {
+_s(PatientsPage, "pxlApfHat53z/gctRStLRRMclPo=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];

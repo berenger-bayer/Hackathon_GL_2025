@@ -6,7 +6,6 @@
   "/api/stats/route": "app/api/stats/route.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js",
   "/patients/[id]/completer/page": "app/patients/[id]/completer/page.js",
   "/patients/[id]/route": "app/patients/[id]/route.js",
   "/patients/ajouter/page": "app/patients/ajouter/page.js",

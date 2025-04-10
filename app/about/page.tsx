@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { FaHeartbeat, FaUserMd, FaChartLine, FaLightbulb, FaShieldAlt, FaHandsHelping } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 
+
+
 const FeatureCard = ({ icon, title, description }) => (
   <motion.div 
     whileHover={{ y: -5, scale: 1.02 }}

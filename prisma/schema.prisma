@@ -8,16 +8,30 @@ generator client {
 }
 
 model Patient {
-  id         String   @id @default(uuid())
-  name       String
-  age        Int
-  sexe       String?   // Sexe du patient : "Homme" ou "Femme"
-  diagnosis  String
-  poids      Float?    // Poids du patient
-  taille     Float?    // Taille du patient
-  traitement String?   // Traitement du patient
-  numSecu    String?   // Numéro de sécurité sociale du patient
-  medecin    String?   // Médecin du patient
-  createdAt  DateTime  @default(now())
+  id            String              @id @default(uuid())
+  name          String
+  age           Int
+  sexe          String?
+  diagnosis     String
+  poids         Float?
+  taille        Float?
+  traitement    String?
+  numSecu       String?             @unique
+  medecin       String?
+  rendezvous    DateTime?
+  createdAt     DateTime            @default(now())
+  notes         String?
+  groupeSanguin String?
+  allergies     String?
+  historique    HistoriqueMedical[] @relation("PatientHistory") // Relation nommée
 }
 
+model HistoriqueMedical {
+  id               Int      @id @default(autoincrement())
+  patientId        String
+  patient          Patient  @relation("PatientHistory", fields: [patientId], references: [id]) // Même nom de relation
+  dateConsultation DateTime @default(now())
+  motif            String
+  observations     String?
+  prescription     String?
+}
