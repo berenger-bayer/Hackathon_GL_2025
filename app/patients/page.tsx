@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
   FaPlus, FaEdit, FaTrash, FaPrint, FaEye, FaExclamationTriangle, 
-  FaSearch, FaSort, FaFilter, FaWeight, FaRulerVertical, FaIdCard, 
-  FaUserMd, FaPills, FaCalendarAlt, FaHeartbeat, FaAllergies, 
+  FaSearch, FaSort, FaFilter, FaWeight, FaIdCard, 
+  FaHeartbeat, 
   FaNotesMedical, FaVenus, FaMars, FaTransgender, FaBirthdayCake 
 } from "react-icons/fa";
 import Notification from "../components/Notification";
@@ -41,6 +41,8 @@ export default function PatientsPage() {
   const [expandedPatient, setExpandedPatient] = useState<string | null>(null);
   const router = useRouter();
 
+  
+    
   const loadPatients = () => {
     fetch("/api/patients")
       .then(async (res) => {
@@ -163,6 +165,7 @@ export default function PatientsPage() {
       minute: "2-digit",
     });
   };
+  
 
   const renderSexe = (sexe: string) => {
     switch (sexe?.toUpperCase()) {
@@ -244,16 +247,16 @@ export default function PatientsPage() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="border-b-2 border-gray-800">
-                <th className="py-2 px-4 text-left">ID</th>
+                <th className="py-2 px-4 text-left">N°</th>
                 <th className="py-2 px-4 text-left">Nom</th>
                 <th className="py-2 px-4 text-left">Sexe</th>
                 <th className="py-2 px-4 text-left">Diagnostic</th>
               </tr>
             </thead>
             <tbody>
-              {filteredPatients.map((patient) => (
+              {filteredPatients.map((patient, index) => (
                 <tr key={patient.id} className="border-b border-gray-200">
-                  <td className="py-2 px-4">{patient.id}</td>
+                  <td className="py-2 px-4">{index + 1}</td>
                   <td className="py-2 px-4">{patient.name}</td>
                   <td className="py-2 px-4">
                     {patient.sexe === 'M' ? 'Masculin' : 
@@ -500,7 +503,10 @@ export default function PatientsPage() {
               padding-bottom: 10px;
               border-bottom: 2px solid #000;
             }
-            
+            nav { 
+                  display: none !important;
+                }
+                
             table {
               width: 100%;
               border-collapse: collapse;

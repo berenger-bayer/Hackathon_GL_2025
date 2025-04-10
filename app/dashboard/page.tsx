@@ -37,8 +37,11 @@ export default function ModernDashboard() {
           start: dateRange.start.toISOString(),
           end: dateRange.end.toISOString()
         });
-        
+
         const res = await fetch(`/api/stats?${params}`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
         const data = await res.json();
         setStats(data);
       } catch (error) {
@@ -64,17 +67,56 @@ export default function ModernDashboard() {
     );
   }
 
+  if (!stats) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <p className="mt-4 text-lg font-medium text-gray-600">
+            Aucune donnée disponible.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-    
+
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">Tableau de bord AI4CKD</h1>
           <div className="flex items-center space-x-4">
             <DateRangePicker value={dateRange} onChange={setDateRange} />
-            <button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200">
+            <button
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+              onClick={() => {
+                // re-fetch data on click
+                const fetchData = async () => {
+                  try {
+                    setLoading(true);
+                    const params = new URLSearchParams({
+                      start: dateRange.start.toISOString(),
+                      end: dateRange.end.toISOString()
+                    });
+
+                    const res = await fetch(`/api/stats?${params}`);
+                    if (!res.ok) {
+                      throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    const data = await res.json();
+                    setStats(data);
+                  } catch (error) {
+                    console.error("Fetch error:", error);
+                  } finally {
+                    setLoading(false);
+                  }
+                };
+
+                fetchData();
+              }}
+            >
               <FiRefreshCw className="text-gray-600" />
             </button>
           </div>
@@ -91,28 +133,28 @@ export default function ModernDashboard() {
           <KpiCard
             icon={<FiUsers className="text-blue-500" size={24} />}
             title="Patients"
-            value={stats?.totalPatients || 0}
+            value={stats.totalPatients || 0}
             change="+12%"
             trend="up"
           />
           <KpiCard
             icon={<FiHeart className="text-green-500" size={24} />}
             title="Âge Moyen"
-            value={stats?.averageAge ? stats.averageAge.toFixed(1) : "N/A"}
+            value={stats.averageAge ? stats.averageAge.toFixed(1) : "N/A"}
             change="+2.5%"
             trend="up"
           />
           <KpiCard
             icon={<FiTrendingUp className="text-purple-500" size={24} />}
             title="Nouveaux Cas"
-            value={stats?.monthlyTrend?.[stats.monthlyTrend.length - 1]?.count || 0}
+            value={stats.monthlyTrend?.[stats.monthlyTrend.length - 1]?.count || 0}
             change="+8%"
             trend="up"
           />
           <KpiCard
             icon={<FiAlertTriangle className="text-red-500" size={24} />}
-            title="Cas Graves"
-            value={stats?.riskDistribution?.find(r => r.risk === "High")?.count || 0}
+            title="Cas Critiques"
+            value={stats.riskDistribution?.find(r => r.risk === "High")?.count || 0}
             change="-3%"
             trend="down"
           />
@@ -128,7 +170,7 @@ export default function ModernDashboard() {
           >
             <h2 className="text-lg font-semibold mb-4">Activité Mensuelle</h2>
             <BarChart
-              data={stats?.monthlyTrend || []}
+              data={stats.monthlyTrend || []}
               xField="month"
               yField="count"
               height={300}
@@ -143,7 +185,7 @@ export default function ModernDashboard() {
           >
             <h2 className="text-lg font-semibold mb-4">Répartition par Genre</h2>
             <PieChart
-              data={stats?.genders || []}
+              data={stats.genders || []}
               angleField="count"
               colorField="gender"
               height={300}
@@ -158,7 +200,7 @@ export default function ModernDashboard() {
           >
             <h2 className="text-lg font-semibold mb-4">Niveau de Risque</h2>
             <ProgressCircle
-              data={stats?.riskDistribution || []}
+              data={stats.riskDistribution || []}
               height={300}
             />
           </motion.div>
@@ -174,7 +216,7 @@ export default function ModernDashboard() {
           >
             <h2 className="text-lg font-semibold mb-4">Diagnostics Fréquents</h2>
             <CalendarChart
-              data={stats?.diagnoses || []}
+              data={stats.diagnoses || []}
               height={350}
             />
           </motion.div>
@@ -187,12 +229,12 @@ export default function ModernDashboard() {
           >
             <h2 className="text-lg font-semibold mb-4">Patients Récents</h2>
             <DataTable
-              data={stats?.recentPatients || []}
+              data={stats.recentPatients || []}
               columns={[
                 { header: "Nom", accessor: "name" },
                 { header: "Dernière Visite", accessor: "lastVisit" },
-                { 
-                  header: "Statut", 
+                {
+                  header: "Statut",
                   accessor: "status",
                   cell: (value) => (
                     <span className={`px-2 py-1 rounded-full text-xs ${

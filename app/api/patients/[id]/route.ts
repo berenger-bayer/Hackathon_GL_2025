@@ -1,79 +1,107 @@
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server'
+import { PrismaClient } from '@prisma/client'
 
-// GET - Fetch single patient
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+const prisma = new PrismaClient()
+
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    // Properly destructure after awaiting params
-    const { id } = params;
+    // Déstructurez les params directement dans les arguments de la fonction
+    const { id } = params
 
     if (!id) {
       return NextResponse.json(
-        { error: 'Patient ID is required' },
+        { error: "ID du patient manquant" },
         { status: 400 }
-      );
+      )
     }
 
     const patient = await prisma.patient.findUnique({
-      where: { id },
-    });
+      where: { id }
+    })
 
     if (!patient) {
       return NextResponse.json(
-        { error: 'Patient not found' },
+        { error: "Patient non trouvé" },
         { status: 404 }
-      );
+      )
     }
 
-    return NextResponse.json(patient);
+    return NextResponse.json(patient)
+    
   } catch (error) {
-    console.error('Error fetching patient:', error);
+    console.error("Erreur récupération patient:", error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Erreur serveur" },
       { status: 500 }
-    );
+    )
   }
 }
 
-// PUT - Update patient
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+// Les corrections similaires pour PUT et DELETE
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const { id } = params;
-    const data = await request.json();
+    const { id } = params // Déstructuration directe
+    const data = await request.json()
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID du patient manquant" },
+        { status: 400 }
+      )
+    }
 
     const updatedPatient = await prisma.patient.update({
       where: { id },
-      data,
-    });
+      data: {
+        ...data,
+        age: data.age ? parseInt(data.age) : undefined,
+        poids: data.poids ? parseFloat(data.poids) : undefined,
+        taille: data.taille ? parseFloat(data.taille) : undefined
+      }
+    })
 
-    return NextResponse.json(updatedPatient);
+    return NextResponse.json(updatedPatient)
+    
   } catch (error) {
-    console.error('Error updating patient:', error);
+    console.error("Erreur mise à jour patient:", error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Erreur serveur" },
       { status: 500 }
-    );
+    )
   }
 }
 
-// DELETE - Remove patient
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const { id } = params;
+    const { id } = params // Déstructuration directe
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID du patient manquant" },
+        { status: 400 }
+      )
+    }
 
     await prisma.patient.delete({
-      where: { id },
-    });
+      where: { id }
+    })
 
-    return NextResponse.json(
-      { message: 'Patient deleted successfully' },
-      { status: 200 }
-    );
+    return new NextResponse(null, { status: 204 })
+    
   } catch (error) {
-    console.error('Error deleting patient:', error);
+    console.error("Erreur suppression patient:", error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Erreur serveur" },
       { status: 500 }
-    );
+    )
   }
 }

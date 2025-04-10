@@ -121,7 +121,7 @@ export default function AjouterPatientPage() {
     : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-10 px-4 text-black">
       <AnimatePresence>
         {showSuccess && (
           <motion.div

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { FaArrowLeft, FaPrint, FaEdit, FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
+import { FaArrowLeft, FaPrint, FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
 
 type Patient = {
   id: string;
@@ -90,11 +90,11 @@ export default function FicheMedicalePatient() {
       <div className="max-w-4xl mx-auto print:max-w-full">
         {/* Barre d'actions (non imprimée) */}
         <div className="flex justify-between mb-6 no-print">
-          <button onClick={() => router.back()} className="flex items-center text-blue-800 hover:underline">
+          <button onClick={() => router.back()} className="flex items-center text-blue-800 hover:underline print:hidden">
             <FaArrowLeft className="mr-2" /> Retour
           </button>
             <div className="flex gap-3">
-            <button onClick={() => window.print()} className="bg-gray-700 text-white px-4 py-2 rounded flex items-center">
+            <button onClick={() => window.print()} className="bg-gray-700 text-white px-4 py-2 rounded flex items-center print:hidden">
               <FaPrint className="mr-2" /> Imprimer
             </button>
           </div>

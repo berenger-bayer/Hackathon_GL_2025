@@ -9,14 +9,28 @@ const DEFAULT_PASSWORD = "medecin123";
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (isLoggedIn) {
-      router.push("/"); // Redirection si déjà connecté
+    // Vérifier si l'utilisateur vient d'être déconnecté
+    const logoutFlag = sessionStorage.getItem("justLoggedOut");
+    
+    if (logoutFlag === "true") {
+      // Supprimer le flag de déconnexion
+      sessionStorage.removeItem("justLoggedOut");
+      setIsLoading(false);
+      return; // Ne pas rediriger, forcer la connexion
     }
-  }, []);
+    
+    // Vérifier si l'utilisateur est connecté
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (isLoggedIn === "true") {
+      router.push("/"); // Redirection si déjà connecté
+    } else {
+      setIsLoading(false);
+    }
+  }, [router]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +43,21 @@ export default function LoginPage() {
     }
   };
 
+  // Afficher un état de chargement pendant la vérification
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 ">
+        <div className="text-center">
+          <div className="spinner-border text-blue-600" role="status">
+            <span className="sr-only">Chargement...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 text-black">
       <form
         onSubmit={handleLogin}
         className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm"

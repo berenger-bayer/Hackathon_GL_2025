@@ -54,7 +54,7 @@ export default function Notification({
 
   return (
     <div
-      className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-md mx-auto mt-4 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-md mx-auto mt-4 z-50 transition-all duration-300 print:hidden ${
         isVisible ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
       }`}
     >

@@ -3,12 +3,30 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const router = useRouter();
+  
+  const handleLogout = () => {
+    // Définir le flag de déconnexion
+    sessionStorage.setItem("justLoggedOut", "true");
+    
+    // Effacer les données d'authentification
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("userData");
+    
+    
+    
+    // Rediriger vers la page de connexion
+    router.push("/login");
+  };
+  
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-white shadow-md sticky top-0 z-50 print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
@@ -16,7 +34,7 @@ export default function Navigation() {
               <span className="text-blue-600 text-xl font-bold">AI4CKD</span>
               <Image 
                 src="/logo-maladie-renale.svg" 
-                alt="Logo" 
+                alt="Logo AI4CKD pour la gestion des maladies rénales chroniques" 
                 width={52} 
                 height={32} 
                 className="ml-2"
@@ -30,9 +48,9 @@ export default function Navigation() {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 hover:text-blue-600 focus:outline-none"
-              aria-label="Toggle menu"
+              aria-label="Ouvrir le menu de navigation"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
               </svg>
             </button>
@@ -49,12 +67,28 @@ export default function Navigation() {
             <Link href="/about" className="px-2 py-2 text-sm lg:text-base text-gray-700 hover:text-blue-600 transition whitespace-nowrap">
               À propos
             </Link>
-            <Link 
-              href="/login" 
-              className="ml-2 px-3 py-2 text-sm lg:text-base bg-red-500 text-white rounded-md hover:bg-blue-700 transition whitespace-nowrap"
+            <button 
+              onClick={handleLogout}
+              className="ml-2 px-3 py-2 text-sm lg:text-base bg-red-500 text-white rounded-md hover:bg-red-600 transition whitespace-nowrap flex items-center"
+              aria-label="Se déconnecter de l'application"
             >
-              Deconnexion
-            </Link>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-5 w-5 mr-1" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" 
+                />
+              </svg>
+              Déconnexion
+            </button>
           </div>
         </div>
       </div>
@@ -84,13 +118,28 @@ export default function Navigation() {
             >
               À propos
             </Link>
-            <Link 
-              href="/login" 
-              className="block px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-              onClick={() => setIsMenuOpen(false)}
+            <button 
+              onClick={handleLogout}
+              className="block w-full text-left px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition flex items-center"
+              aria-label="Se déconnecter de l'application"
             >
-              Deconnexion
-            </Link>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-5 w-5 mr-2" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" 
+                />
+              </svg>
+              Déconnexion
+            </button>
           </div>
         </div>
       )}
