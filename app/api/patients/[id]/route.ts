@@ -8,6 +8,19 @@ interface RouteParams {
   params: { id: string };
 }
 
+// Type pour les données de mise à jour du patient
+interface UpdatePatientData {
+  nom?: string;
+  age?: number;
+  sexe?: string;
+  groupeSanguin?: string;
+  poids?: number;
+  taille?: number;
+  allergies?: string;
+  diagnosis?: string;
+  traitement?: string;
+}
+
 export async function GET(
   request: Request,
   { params }: RouteParams
@@ -23,12 +36,12 @@ export async function GET(
     }
 
     const patient = await prisma.patient.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!patient) {
       return NextResponse.json(
-        { error: "Patient non trouvé" },
+        { error: `Patient non trouvé avec l'ID: ${id}` },
         { status: 404 }
       );
     }
@@ -37,11 +50,9 @@ export async function GET(
   } catch (error) {
     console.error("Erreur récupération patient:", error);
     return NextResponse.json(
-      { error: "Erreur serveur" },
+      { error: "Erreur serveur lors de la récupération du patient" },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -51,7 +62,7 @@ export async function PUT(
 ): Promise<NextResponse> {
   try {
     const { id } = params;
-    const data = await request.json();
+    const data: UpdatePatientData = await request.json();
 
     if (!id) {
       return NextResponse.json(
@@ -64,21 +75,19 @@ export async function PUT(
       where: { id },
       data: {
         ...data,
-        age: data.age ? parseInt(data.age) : undefined,
-        poids: data.poids ? parseFloat(data.poids) : undefined,
-        taille: data.taille ? parseFloat(data.taille) : undefined
-      }
+        age: data.age,
+        poids: data.poids,
+        taille: data.taille,
+      },
     });
 
     return NextResponse.json(updatedPatient);
   } catch (error) {
     console.error("Erreur mise à jour patient:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la mise à jour" },
+      { error: "Erreur lors de la mise à jour du patient" },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -97,17 +106,15 @@ export async function DELETE(
     }
 
     await prisma.patient.delete({
-      where: { id }
+      where: { id },
     });
 
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error("Erreur suppression patient:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la suppression" },
+      { error: "Erreur lors de la suppression du patient" },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
