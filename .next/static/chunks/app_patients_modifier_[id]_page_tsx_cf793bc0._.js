@@ -764,7 +764,7 @@ function EditPatientPage() {
         columnNumber: 5
     }, this);
 }
-_s(EditPatientPage, "Ry33JB/Zw7/vHRtU6cvkSo9y3Oo=", false, function() {
+_s(EditPatientPage, "HE25+SuzzPVNlbt6LlsML7de5HI=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"]

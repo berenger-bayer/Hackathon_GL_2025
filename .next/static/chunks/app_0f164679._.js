@@ -1284,7 +1284,7 @@ function ModernDashboard() {
         columnNumber: 5
     }, this);
 }
-_s(ModernDashboard, "hWg9HgcH9EIjr2R1418KwTI+8QE=");
+_s(ModernDashboard, "WPOyx5KpQMtkQ3AWNCSyL7BB1NY=");
 _c = ModernDashboard;
 // Component for KPI Cards
 function KpiCard({ icon, title, value, change, trend }) {

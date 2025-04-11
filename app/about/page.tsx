@@ -1,13 +1,25 @@
 "use client";
-
+import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaHeartbeat, FaUserMd, FaChartLine, FaLightbulb, FaShieldAlt, FaHandsHelping } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 
+type FeatureCardProps = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+};
+
+type TeamMemberProps = {
+  name: string;
+  role: string;
+  img?: React.ReactNode;
+};
 
 
-const FeatureCard = ({ icon, title, description }) => (
+
+const FeatureCard = ({ icon, title, description }: FeatureCardProps) => (
   <motion.div 
     whileHover={{ y: -5, scale: 1.02 }}
     className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 flex flex-col items-center text-center"
@@ -18,7 +30,7 @@ const FeatureCard = ({ icon, title, description }) => (
   </motion.div>
 );
 
-const TeamMember = ({ name, role, img }) => (
+const TeamMember = ({ name, role, img }: TeamMemberProps) => (
   <motion.div 
     initial={{ opacity: 0 }}
     whileInView={{ opacity: 1 }}
@@ -58,6 +70,7 @@ export default function About() {
             <p className="text-xl md:text-2xl mb-8 font-light">
               AI4CKD combine intelligence artificielle et expertise médicale pour transformer la gestion des patients atteints d insuffisance rénale chronique.
             </p>
+            
             <Link 
               href="/" 
               className="inline-block px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition duration-300"
