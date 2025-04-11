@@ -21,7 +21,7 @@ ChartJS.register(
 );
 
 interface BarChartProps {
-  data: { [key: string]: any }[];
+  data: { [key: string]: unknown }[];
   xField: string;
   yField: string;
   height?: number;

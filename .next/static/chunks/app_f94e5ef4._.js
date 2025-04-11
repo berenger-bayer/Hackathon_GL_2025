@@ -21,6 +21,7 @@ var _s = __turbopack_context__.k.signature();
 function DateRangePicker({ value, onChange }) {
     _s();
     const [showPicker, setShowPicker] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSelect = (ranges)=>{
         onChange({
             start: ranges.selection.startDate,
@@ -45,7 +46,7 @@ function DateRangePicker({ value, onChange }) {
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/components/charts/DateRangePicker.tsx",
-                lineNumber: 31,
+                lineNumber: 32,
                 columnNumber: 7
             }, this),
             showPicker && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -60,18 +61,18 @@ function DateRangePicker({ value, onChange }) {
                     direction: "horizontal"
                 }, void 0, false, {
                     fileName: "[project]/app/components/charts/DateRangePicker.tsx",
-                    lineNumber: 40,
+                    lineNumber: 41,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/components/charts/DateRangePicker.tsx",
-                lineNumber: 39,
+                lineNumber: 40,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/components/charts/DateRangePicker.tsx",
-        lineNumber: 30,
+        lineNumber: 31,
         columnNumber: 5
     }, this);
 }
@@ -195,12 +196,12 @@ function PieChart({ data, angleField, colorField, height = 300 }) {
             data: chartData
         }, void 0, false, {
             fileName: "[project]/app/components/charts/PieChart.tsx",
-            lineNumber: 43,
+            lineNumber: 44,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/components/charts/PieChart.tsx",
-        lineNumber: 42,
+        lineNumber: 43,
         columnNumber: 5
     }, this);
 }
@@ -255,6 +256,7 @@ function ProgressCircle({ data, height = 300 }) {
             },
             tooltip: {
                 callbacks: {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     label: function(context) {
                         return `${context.label}: ${context.raw} patients`;
                     }
@@ -271,12 +273,12 @@ function ProgressCircle({ data, height = 300 }) {
             options: options
         }, void 0, false, {
             fileName: "[project]/app/components/charts/ProgressCircle.tsx",
-            lineNumber: 57,
+            lineNumber: 58,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/components/charts/ProgressCircle.tsx",
-        lineNumber: 56,
+        lineNumber: 57,
         columnNumber: 5
     }, this);
 }
@@ -292,7 +294,7 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
 {
-__turbopack_context__.s({
+/* eslint-disable @typescript-eslint/no-explicit-any */ __turbopack_context__.s({
     "DataTable": (()=>DataTable)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
@@ -315,17 +317,17 @@ function DataTable({ data, columns, height = 300 }) {
                                 children: column.header
                             }, column.accessor, false, {
                                 fileName: "[project]/app/components/charts/DataTable.tsx",
-                                lineNumber: 22,
+                                lineNumber: 24,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/components/charts/DataTable.tsx",
-                        lineNumber: 20,
+                        lineNumber: 22,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/components/charts/DataTable.tsx",
-                    lineNumber: 19,
+                    lineNumber: 21,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -336,28 +338,28 @@ function DataTable({ data, columns, height = 300 }) {
                                     children: column.cell ? column.cell(row[column.accessor]) : row[column.accessor]
                                 }, column.accessor, false, {
                                     fileName: "[project]/app/components/charts/DataTable.tsx",
-                                    lineNumber: 35,
+                                    lineNumber: 37,
                                     columnNumber: 17
                                 }, this))
                         }, i, false, {
                             fileName: "[project]/app/components/charts/DataTable.tsx",
-                            lineNumber: 33,
+                            lineNumber: 35,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/app/components/charts/DataTable.tsx",
-                    lineNumber: 31,
+                    lineNumber: 33,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/components/charts/DataTable.tsx",
-            lineNumber: 18,
+            lineNumber: 20,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/components/charts/DataTable.tsx",
-        lineNumber: 17,
+        lineNumber: 19,
         columnNumber: 5
     }, this);
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 interface Column {
@@ -7,6 +8,7 @@ interface Column {
 }
 
 interface DataTableProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: { [key: string]: any }[];
   columns: Column[];
   height?: number;

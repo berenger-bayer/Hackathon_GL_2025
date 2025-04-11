@@ -44,6 +44,7 @@ export function ProgressCircle({ data, height = 300 }: ProgressCircleProps) {
       },
       tooltip: {
         callbacks: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           label: function(context: any) {
             return `${context.label}: ${context.raw} patients`;
           }

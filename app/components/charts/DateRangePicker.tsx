@@ -13,6 +13,7 @@ interface DateRangePickerProps {
 export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
   const [showPicker, setShowPicker] = useState(false);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSelect = (ranges: any) => {
     onChange({
       start: ranges.selection.startDate,

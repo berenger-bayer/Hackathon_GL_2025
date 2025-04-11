@@ -3,10 +3,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  FaUserPlus, FaUser, FaBirthdayCake, FaNotesMedical, FaCheckCircle, 
-  FaWeight, FaRulerVertical, FaIdCard, FaUserMd, FaPills,
-  FaArrowLeft, FaExclamationTriangle, FaHeartbeat, FaAllergies, FaCalendarAlt
-} from "react-icons/fa";
+  FaUserPlus, FaUser, FaNotesMedical, FaCheckCircle, 
+  FaWeight, 
+  FaArrowLeft, FaExclamationTriangle, FaHeartbeat} from "react-icons/fa";
 
 export default function AjouterPatientPage() {
   const [formData, setFormData] = useState({

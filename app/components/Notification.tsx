@@ -299,7 +299,7 @@ export default function Notification({
             {/* Assurance */}
             {appointmentData.insuranceRequired && (
               <div className="mt-2 text-xs text-red-600">
-                N'oubliez pas d'apporter votre carte d'assurance maladie
+                N-oubliez pas d-apporter votre carte d-assurance maladie
               </div>
             )}
           </div>

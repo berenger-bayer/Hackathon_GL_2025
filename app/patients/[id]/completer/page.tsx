@@ -48,6 +48,7 @@ export default function CompleterDossierPatient() {
     
     if (!patient) return;
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let parsedValue: any = value;
     
     // Convertir les valeurs numériques

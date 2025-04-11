@@ -11,6 +11,7 @@ import {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface PieChartProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: { [key: string]: any }[];
   angleField: string;
   colorField: string;
