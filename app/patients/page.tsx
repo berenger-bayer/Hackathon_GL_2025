@@ -1,11 +1,12 @@
+/* eslint-disable react/jsx-no-undef */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { JSX } from "react";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { 
   FaPlus, FaEdit, FaTrash, FaPrint, FaEye, FaExclamationTriangle, 
   FaSearch, FaSort, FaFilter, FaWeight, FaIdCard, 
@@ -79,7 +80,7 @@ export default function PatientsPage() {
         const data = await res.json();
         setPatients(data);
 
-        const alertes = data.filter((p) =>
+        const alertes = data.filter((p: { diagnosis: string; }) =>
           p.diagnosis?.toLowerCase().includes("critique")
         );
         
@@ -88,7 +89,7 @@ export default function PatientsPage() {
         dansTroisJours.setDate(maintenant.getDate() + 3);
         
         // Trouver les rendez-vous à venir
-        const prochainsRdvs = data.filter((p) => {
+        const prochainsRdvs = data.filter((p: { rendezvous: string | number | Date; }) => {
           if (!p.rendezvous) return false;
           const rdv = new Date(p.rendezvous);
           return rdv >= maintenant && rdv <= dansTroisJours;
@@ -98,7 +99,7 @@ export default function PatientsPage() {
           setNotification(`${alertes.length} patient(s) en état critique`);
           setNotificationType("warning");
           setNotificationDetails(
-            alertes.map(p => `• ${p.name} - ${p.diagnosis}`).join("\n")
+            alertes.map((p: { name: any; diagnosis: any; }) => `• ${p.name} - ${p.diagnosis}`).join("\n")
           );
           setNotificationData(undefined);
           setAppointmentConfirmCallback(undefined);
@@ -183,7 +184,7 @@ export default function PatientsPage() {
             setNotification(`${prochainsRdvs.length} rendez-vous à venir dans les 3 prochains jours`);
             setNotificationType("info");
             
-            const details = prochainsRdvs.map(p => {
+            const details = prochainsRdvs.map((p: { rendezvous: string | number | Date; name: any; }) => {
               const rdvDate = new Date(p.rendezvous);
               return `• ${p.name} - ${rdvDate.toLocaleDateString("fr-FR", {weekday: 'long'})} ${rdvDate.toLocaleDateString("fr-FR")} à ${rdvDate.toLocaleTimeString("fr-FR", {hour: "2-digit", minute: "2-digit"})}`;
             }).join("\n");
