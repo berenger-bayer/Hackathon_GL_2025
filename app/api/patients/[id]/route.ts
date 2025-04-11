@@ -1,9 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Type pour les données de mise à jour du patient
 interface UpdatePatientData {
   nom?: string;
   age?: number;
@@ -16,20 +15,21 @@ interface UpdatePatientData {
   traitement?: string;
 }
 
+// 📌 GET patient by ID
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } } // Typage correct
-): Promise<NextResponse> {
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+
+  if (!id) {
+    return NextResponse.json(
+      { error: "ID du patient manquant" },
+      { status: 400 }
+    );
+  }
+
   try {
-    const { id } = params;
-
-    if (!id) {
-      return NextResponse.json(
-        { error: "ID du patient manquant" },
-        { status: 400 }
-      );
-    }
-
     const patient = await prisma.patient.findUnique({
       where: { id },
     });
@@ -51,29 +51,26 @@ export async function GET(
   }
 }
 
+// 📌 PUT (mise à jour)
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } } // Typage correct
-): Promise<NextResponse> {
-  try {
-    const { id } = params;
-    const data: UpdatePatientData = await request.json();
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
 
-    if (!id) {
-      return NextResponse.json(
-        { error: "ID du patient manquant" },
-        { status: 400 }
-      );
-    }
+  if (!id) {
+    return NextResponse.json(
+      { error: "ID du patient manquant" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const data: UpdatePatientData = await req.json();
 
     const updatedPatient = await prisma.patient.update({
       where: { id },
-      data: {
-        ...data,
-        age: data.age,
-        poids: data.poids,
-        taille: data.taille,
-      },
+      data,
     });
 
     return NextResponse.json(updatedPatient);
@@ -86,20 +83,21 @@ export async function PUT(
   }
 }
 
+// 📌 DELETE patient
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } } // Typage correct
-): Promise<NextResponse> {
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+
+  if (!id) {
+    return NextResponse.json(
+      { error: "ID du patient manquant" },
+      { status: 400 }
+    );
+  }
+
   try {
-    const { id } = params;
-
-    if (!id) {
-      return NextResponse.json(
-        { error: "ID du patient manquant" },
-        { status: 400 }
-      );
-    }
-
     await prisma.patient.delete({
       where: { id },
     });
