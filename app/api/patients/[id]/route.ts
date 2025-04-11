@@ -3,11 +3,6 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Type pour le contexte des params
-interface RouteParams {
-  params: { id: string };
-}
-
 // Type pour les données de mise à jour du patient
 interface UpdatePatientData {
   nom?: string;
@@ -23,7 +18,7 @@ interface UpdatePatientData {
 
 export async function GET(
   request: Request,
-  { params }: RouteParams
+  { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     const { id } = params;
@@ -58,7 +53,7 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: RouteParams
+  { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     const { id } = params;
@@ -93,7 +88,7 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: RouteParams
+  { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     const { id } = params;
