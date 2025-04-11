@@ -60,7 +60,7 @@ export async function GET() {
         id: true,
         name: true,
         age: true,
-        sexe: true, // Inclure le sexe dans la réponse
+        sexe: true, 
         diagnosis: true,
         poids: true,
         taille: true,

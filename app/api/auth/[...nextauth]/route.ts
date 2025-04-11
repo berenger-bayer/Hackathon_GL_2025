@@ -3,8 +3,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
-import type { JWT } from "next-auth/jwt"; // Ajoute cette ligne
-import type { Session } from "next-auth"; // Ajoute cette ligne
+import type { JWT } from "next-auth/jwt"; 
+import type { Session } from "next-auth"; 
 
 
 const prisma = new PrismaClient();
