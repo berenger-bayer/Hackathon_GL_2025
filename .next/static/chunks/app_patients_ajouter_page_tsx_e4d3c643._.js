@@ -146,25 +146,25 @@ function AjouterPatientPage() {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaCheckCircle"], {}, void 0, false, {
                                     fileName: "[project]/app/patients/ajouter/page.tsx",
-                                    lineNumber: 134,
+                                    lineNumber: 133,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: "Patient ajouté avec succès!"
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/ajouter/page.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 134,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/patients/ajouter/page.tsx",
-                            lineNumber: 133,
+                            lineNumber: 132,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                        lineNumber: 127,
+                        lineNumber: 126,
                         columnNumber: 11
                     }, this),
                     errors.submit && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -186,31 +186,31 @@ function AjouterPatientPage() {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaExclamationTriangle"], {}, void 0, false, {
                                     fileName: "[project]/app/patients/ajouter/page.tsx",
-                                    lineNumber: 148,
+                                    lineNumber: 147,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: errors.submit
                                 }, void 0, false, {
                                     fileName: "[project]/app/patients/ajouter/page.tsx",
-                                    lineNumber: 149,
+                                    lineNumber: 148,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/patients/ajouter/page.tsx",
-                            lineNumber: 147,
+                            lineNumber: 146,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                        lineNumber: 141,
+                        lineNumber: 140,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                lineNumber: 125,
+                lineNumber: 124,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -224,14 +224,14 @@ function AjouterPatientPage() {
                                 className: "mr-2"
                             }, void 0, false, {
                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                lineNumber: 160,
+                                lineNumber: 159,
                                 columnNumber: 11
                             }, this),
                             "Retour"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                        lineNumber: 156,
+                        lineNumber: 155,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -252,19 +252,19 @@ function AjouterPatientPage() {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaUserPlus"], {}, void 0, false, {
                                             fileName: "[project]/app/patients/ajouter/page.tsx",
-                                            lineNumber: 171,
+                                            lineNumber: 170,
                                             columnNumber: 15
                                         }, this),
                                         "Nouveau Patient"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/patients/ajouter/page.tsx",
-                                    lineNumber: 170,
+                                    lineNumber: 169,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                lineNumber: 169,
+                                lineNumber: 168,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -282,14 +282,14 @@ function AjouterPatientPage() {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaUser"], {}, void 0, false, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 180,
+                                                                lineNumber: 179,
                                                                 columnNumber: 19
                                                             }, this),
                                                             "Informations personnelles"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                        lineNumber: 179,
+                                                        lineNumber: 178,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -307,13 +307,13 @@ function AjouterPatientPage() {
                                                                                 children: "*"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 187,
+                                                                                lineNumber: 186,
                                                                                 columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 186,
+                                                                        lineNumber: 185,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -324,7 +324,7 @@ function AjouterPatientPage() {
                                                                         className: `w-full p-3 border rounded-lg ${errors.name ? "border-red-500" : "border-gray-300"}`
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 189,
+                                                                        lineNumber: 188,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     errors.name && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -332,13 +332,13 @@ function AjouterPatientPage() {
                                                                         children: errors.name
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 196,
+                                                                        lineNumber: 195,
                                                                         columnNumber: 37
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 185,
+                                                                lineNumber: 184,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -353,13 +353,13 @@ function AjouterPatientPage() {
                                                                                 children: "*"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 201,
+                                                                                lineNumber: 200,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 200,
+                                                                        lineNumber: 199,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -372,7 +372,7 @@ function AjouterPatientPage() {
                                                                         className: `w-full p-3 border rounded-lg ${errors.age ? "border-red-500" : "border-gray-300"}`
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 203,
+                                                                        lineNumber: 202,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     errors.age && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -380,13 +380,13 @@ function AjouterPatientPage() {
                                                                         children: errors.age
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 212,
+                                                                        lineNumber: 211,
                                                                         columnNumber: 36
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 199,
+                                                                lineNumber: 198,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -397,7 +397,7 @@ function AjouterPatientPage() {
                                                                         children: "Sexe"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 216,
+                                                                        lineNumber: 215,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -411,7 +411,7 @@ function AjouterPatientPage() {
                                                                                 children: "Sélectionner..."
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 225,
+                                                                                lineNumber: 224,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -419,7 +419,7 @@ function AjouterPatientPage() {
                                                                                 children: "Masculin"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 226,
+                                                                                lineNumber: 225,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -427,7 +427,7 @@ function AjouterPatientPage() {
                                                                                 children: "Féminin"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 227,
+                                                                                lineNumber: 226,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -435,19 +435,19 @@ function AjouterPatientPage() {
                                                                                 children: "Autre"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 228,
+                                                                                lineNumber: 227,
                                                                                 columnNumber: 23
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 219,
+                                                                        lineNumber: 218,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 215,
+                                                                lineNumber: 214,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -458,7 +458,7 @@ function AjouterPatientPage() {
                                                                         children: "N° Sécurité Sociale"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 233,
+                                                                        lineNumber: 232,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -469,25 +469,25 @@ function AjouterPatientPage() {
                                                                         className: "w-full p-3 border border-gray-300 rounded-lg"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 236,
+                                                                        lineNumber: 235,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 232,
+                                                                lineNumber: 231,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                        lineNumber: 184,
+                                                        lineNumber: 183,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                lineNumber: 178,
+                                                lineNumber: 177,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -498,14 +498,14 @@ function AjouterPatientPage() {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaHeartbeat"], {}, void 0, false, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 249,
+                                                                lineNumber: 248,
                                                                 columnNumber: 19
                                                             }, this),
                                                             "Santé"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                        lineNumber: 248,
+                                                        lineNumber: 247,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -519,7 +519,7 @@ function AjouterPatientPage() {
                                                                         children: "Groupe sanguin"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 255,
+                                                                        lineNumber: 254,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -533,7 +533,7 @@ function AjouterPatientPage() {
                                                                                 children: "Sélectionner..."
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 264,
+                                                                                lineNumber: 263,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -541,7 +541,7 @@ function AjouterPatientPage() {
                                                                                 children: "A+"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 265,
+                                                                                lineNumber: 264,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -549,7 +549,7 @@ function AjouterPatientPage() {
                                                                                 children: "A-"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 266,
+                                                                                lineNumber: 265,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -557,7 +557,7 @@ function AjouterPatientPage() {
                                                                                 children: "B+"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 267,
+                                                                                lineNumber: 266,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -565,7 +565,7 @@ function AjouterPatientPage() {
                                                                                 children: "B-"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 268,
+                                                                                lineNumber: 267,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -573,7 +573,7 @@ function AjouterPatientPage() {
                                                                                 children: "AB+"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 269,
+                                                                                lineNumber: 268,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -581,7 +581,7 @@ function AjouterPatientPage() {
                                                                                 children: "AB-"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 270,
+                                                                                lineNumber: 269,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -589,7 +589,7 @@ function AjouterPatientPage() {
                                                                                 children: "O+"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 271,
+                                                                                lineNumber: 270,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -597,19 +597,19 @@ function AjouterPatientPage() {
                                                                                 children: "O-"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 272,
+                                                                                lineNumber: 271,
                                                                                 columnNumber: 23
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 258,
+                                                                        lineNumber: 257,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 254,
+                                                                lineNumber: 253,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -620,7 +620,7 @@ function AjouterPatientPage() {
                                                                         children: "Allergies"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 277,
+                                                                        lineNumber: 276,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -631,31 +631,31 @@ function AjouterPatientPage() {
                                                                         className: "w-full p-3 border border-gray-300 rounded-lg"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 280,
+                                                                        lineNumber: 279,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 276,
+                                                                lineNumber: 275,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                        lineNumber: 253,
+                                                        lineNumber: 252,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                lineNumber: 247,
+                                                lineNumber: 246,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                        lineNumber: 177,
+                                        lineNumber: 176,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -669,14 +669,14 @@ function AjouterPatientPage() {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaNotesMedical"], {}, void 0, false, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 295,
+                                                                lineNumber: 294,
                                                                 columnNumber: 19
                                                             }, this),
                                                             "Informations médicales"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                        lineNumber: 294,
+                                                        lineNumber: 293,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -694,13 +694,13 @@ function AjouterPatientPage() {
                                                                                 children: "*"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                                lineNumber: 302,
+                                                                                lineNumber: 301,
                                                                                 columnNumber: 34
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 301,
+                                                                        lineNumber: 300,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -711,7 +711,7 @@ function AjouterPatientPage() {
                                                                         className: `w-full p-3 border rounded-lg ${errors.diagnosis ? "border-red-500" : "border-gray-300"}`
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 304,
+                                                                        lineNumber: 303,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     errors.diagnosis && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -719,13 +719,13 @@ function AjouterPatientPage() {
                                                                         children: errors.diagnosis
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 311,
+                                                                        lineNumber: 310,
                                                                         columnNumber: 42
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 300,
+                                                                lineNumber: 299,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -736,7 +736,7 @@ function AjouterPatientPage() {
                                                                         children: "Traitement"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 315,
+                                                                        lineNumber: 314,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -747,13 +747,13 @@ function AjouterPatientPage() {
                                                                         className: "w-full p-3 border border-gray-300 rounded-lg"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 318,
+                                                                        lineNumber: 317,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 314,
+                                                                lineNumber: 313,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -764,7 +764,7 @@ function AjouterPatientPage() {
                                                                         children: "Médecin traitant"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 328,
+                                                                        lineNumber: 327,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -775,13 +775,13 @@ function AjouterPatientPage() {
                                                                         className: "w-full p-3 border border-gray-300 rounded-lg"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 331,
+                                                                        lineNumber: 330,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 327,
+                                                                lineNumber: 326,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -792,7 +792,7 @@ function AjouterPatientPage() {
                                                                         children: "Rendez-vous"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 341,
+                                                                        lineNumber: 340,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -803,13 +803,13 @@ function AjouterPatientPage() {
                                                                         className: "w-full p-3 border border-gray-300 rounded-lg"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 344,
+                                                                        lineNumber: 343,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 340,
+                                                                lineNumber: 339,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -820,7 +820,7 @@ function AjouterPatientPage() {
                                                                         children: "Notes"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 354,
+                                                                        lineNumber: 353,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -831,25 +831,25 @@ function AjouterPatientPage() {
                                                                         className: "w-full p-3 border border-gray-300 rounded-lg"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 357,
+                                                                        lineNumber: 356,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 353,
+                                                                lineNumber: 352,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                        lineNumber: 299,
+                                                        lineNumber: 298,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                lineNumber: 293,
+                                                lineNumber: 292,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -860,14 +860,14 @@ function AjouterPatientPage() {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaWeight"], {}, void 0, false, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 370,
+                                                                lineNumber: 369,
                                                                 columnNumber: 19
                                                             }, this),
                                                             "Mesures"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                        lineNumber: 369,
+                                                        lineNumber: 368,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -881,7 +881,7 @@ function AjouterPatientPage() {
                                                                         children: "Poids (kg)"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 376,
+                                                                        lineNumber: 375,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -893,7 +893,7 @@ function AjouterPatientPage() {
                                                                         className: `w-full p-3 border rounded-lg ${errors.poids ? "border-red-500" : "border-gray-300"}`
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 379,
+                                                                        lineNumber: 378,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     errors.poids && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -901,13 +901,13 @@ function AjouterPatientPage() {
                                                                         children: errors.poids
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 387,
+                                                                        lineNumber: 386,
                                                                         columnNumber: 38
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 375,
+                                                                lineNumber: 374,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -918,7 +918,7 @@ function AjouterPatientPage() {
                                                                         children: "Taille (m)"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 391,
+                                                                        lineNumber: 390,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -930,7 +930,7 @@ function AjouterPatientPage() {
                                                                         className: `w-full p-3 border rounded-lg ${errors.taille ? "border-red-500" : "border-gray-300"}`
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 394,
+                                                                        lineNumber: 393,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     errors.taille && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -938,19 +938,19 @@ function AjouterPatientPage() {
                                                                         children: errors.taille
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                        lineNumber: 402,
+                                                                        lineNumber: 401,
                                                                         columnNumber: 39
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 390,
+                                                                lineNumber: 389,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                        lineNumber: 374,
+                                                        lineNumber: 373,
                                                         columnNumber: 17
                                                     }, this),
                                                     imcValue && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -961,7 +961,7 @@ function AjouterPatientPage() {
                                                                 children: "IMC calculé"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 408,
+                                                                lineNumber: 407,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -972,19 +972,19 @@ function AjouterPatientPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                                lineNumber: 409,
+                                                                lineNumber: 408,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                        lineNumber: 407,
+                                                        lineNumber: 406,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                lineNumber: 368,
+                                                lineNumber: 367,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -994,41 +994,41 @@ function AjouterPatientPage() {
                                                 children: isSubmitting ? "Enregistrement..." : "Enregistrer le patient"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                                lineNumber: 414,
+                                                lineNumber: 413,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                                        lineNumber: 292,
+                                        lineNumber: 291,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                                lineNumber: 176,
+                                lineNumber: 175,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/patients/ajouter/page.tsx",
-                        lineNumber: 164,
+                        lineNumber: 163,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/patients/ajouter/page.tsx",
-                lineNumber: 155,
+                lineNumber: 154,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/patients/ajouter/page.tsx",
-        lineNumber: 124,
+        lineNumber: 123,
         columnNumber: 5
     }, this);
 }
-_s(AjouterPatientPage, "1eOhjhCXOW/FS2PJnWWRs94eW9Q=", false, function() {
+_s(AjouterPatientPage, "2FE3Gk+oPHdPVJaiToWSMFnkHcc=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];
