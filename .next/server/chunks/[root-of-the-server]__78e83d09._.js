@@ -78,8 +78,8 @@ var __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$ex
 const prisma = new __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$29$__["PrismaClient"]();
 async function GET(request, { params }) {
     try {
-        // Solution: Accéder directement à params.id sans déstructuration
-        const id = params.id;
+        // Déstructurez les params directement dans les arguments de la fonction
+        const { id } = params;
         if (!id) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: "ID du patient manquant"
@@ -111,21 +111,63 @@ async function GET(request, { params }) {
 }
 async function PUT(request, { params }) {
     try {
-        const id = params.id // Accès direct sans déstructuration
+        const { id } = params // Déstructuration directe
         ;
         const data = await request.json();
-    // ... reste du code inchangé
+        if (!id) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: "ID du patient manquant"
+            }, {
+                status: 400
+            });
+        }
+        const updatedPatient = await prisma.patient.update({
+            where: {
+                id
+            },
+            data: {
+                ...data,
+                age: data.age ? parseInt(data.age) : undefined,
+                poids: data.poids ? parseFloat(data.poids) : undefined,
+                taille: data.taille ? parseFloat(data.taille) : undefined
+            }
+        });
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(updatedPatient);
     } catch (error) {
-    // ... gestion des erreurs
+        console.error("Erreur mise à jour patient:", error);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+            error: "Erreur serveur"
+        }, {
+            status: 500
+        });
     }
 }
 async function DELETE(request, { params }) {
     try {
-        const id = params.id // Accès direct sans déstructuration
+        const { id } = params // Déstructuration directe
         ;
-    // ... reste du code inchangé
+        if (!id) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: "ID du patient manquant"
+            }, {
+                status: 400
+            });
+        }
+        await prisma.patient.delete({
+            where: {
+                id
+            }
+        });
+        return new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"](null, {
+            status: 204
+        });
     } catch (error) {
-    // ... gestion des erreurs
+        console.error("Erreur suppression patient:", error);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+            error: "Erreur serveur"
+        }, {
+            status: 500
+        });
     }
 }
 }}),

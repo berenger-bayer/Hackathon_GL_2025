@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Constants
 const CKD_STATS = [
@@ -60,7 +61,9 @@ const CKD_INFO = [
 ];
 
 export default function Home() {
+  
   return (
+    <ProtectedRoute>
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col relative">
       
       <main className="flex-grow">
@@ -260,11 +263,15 @@ export default function Home() {
 
       <Footer />
     </div>
+  </ProtectedRoute>
+    
   );
 }
 
 function Footer() {
   return (
+    <ProtectedRoute>
+  
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -297,17 +304,17 @@ function Footer() {
             <h3 className="text-lg font-semibold mb-4">Informations</h3>
             <ul className="space-y-2">
               <li><Link href="/about" className="text-gray-400 hover:text-white transition text-sm">À propos</Link></li>
-              <li><Link href="/research" className="text-gray-400 hover:text-white transition text-sm">Recherche clinique</Link></li>
-              <li><Link href="/blog" className="text-gray-400 hover:text-white transition text-sm">Blog médical</Link></li>
+              <li><Link href="/" className="text-gray-400 hover:text-white transition text-sm">Recherche clinique</Link></li>
+              <li><Link href="/" className="text-gray-400 hover:text-white transition text-sm">Blog médical</Link></li>
             </ul>
           </div>
           
           <div>
             <h3 className="text-lg font-semibold mb-4">Légal</h3>
             <ul className="space-y-2">
-              <li><Link href="/privacy" className="text-gray-400 hover:text-white transition text-sm">Confidentialité</Link></li>
-              <li><Link href="/terms" className="text-gray-400 hover:text-white transition text-sm">Conditions</Link></li>
-              <li><Link href="/hipaa" className="text-gray-400 hover:text-white transition text-sm">HIPAA</Link></li>
+              <li><Link href="/" className="text-gray-400 hover:text-white transition text-sm">Confidentialité</Link></li>
+              <li><Link href="/" className="text-gray-400 hover:text-white transition text-sm">Conditions</Link></li>
+              <li><Link href="/" className="text-gray-400 hover:text-white transition text-sm">HIPAA</Link></li>
             </ul>
           </div>
         </div>
@@ -320,5 +327,7 @@ function Footer() {
         </div>
       </div>
     </footer>
+  </ProtectedRoute>
+    
   );
 }

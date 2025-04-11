@@ -3,28 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const router = useRouter();
   
   const handleLogout = () => {
-    // Définir le flag de déconnexion
-    sessionStorage.setItem("justLoggedOut", "true");
-    
-    // Effacer les données d'authentification
+    // Supprimer toutes les traces d'authentification
     localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    sessionStorage.removeItem("userData");
+    document.cookie = "isLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     
-    
-    
-    // Rediriger vers la page de connexion
-    router.push("/login");
+    // Forcer un rechargement complet
+    window.location.href = "/login";
   };
-  
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

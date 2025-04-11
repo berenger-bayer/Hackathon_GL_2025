@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import Notification from "../components/Notification";
 import Navbar from "../components/Navbar";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 type Patient = {
   id: string;
@@ -31,18 +32,44 @@ type Patient = {
   allergies: string | null;
 };
 
+type MedicalAppointmentData = {
+  patientName?: string;
+  patientId?: string;
+  date?: string;
+  time?: string;
+  duration?: string;
+  doctorName?: string;
+  speciality?: string;
+  location?: string;
+  address?: string;
+  reason?: string;
+  instructions?: string;
+  contactPhone?: string;
+  isUrgent?: boolean;
+  insuranceRequired?: boolean;
+  documents?: string[];
+};
+
 export default function PatientsPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [search, setSearch] = useState("");
   const [filterKey, setFilterKey] = useState<keyof Patient>("name");
   const [sortAsc, setSortAsc] = useState(true);
+  
+  // États pour les notifications améliorées
   const [notification, setNotification] = useState("");
+  const [notificationType, setNotificationType] = useState<"success" | "error" | "warning" | "info" | "appointment">("info");
+  const [notificationDetails, setNotificationDetails] = useState<string | undefined>(undefined);
+  const [notificationData, setNotificationData] = useState<MedicalAppointmentData | undefined>(undefined);
+  const [notificationAction, setNotificationAction] = useState<any>(undefined);
+  const [appointmentConfirmCallback, setAppointmentConfirmCallback] = useState<(() => void) | undefined>(undefined);
+  const [appointmentCancelCallback, setAppointmentCancelCallback] = useState<(() => void) | undefined>(undefined);
+  const [appointmentRescheduleCallback, setAppointmentRescheduleCallback] = useState<(() => void) | undefined>(undefined);
+  
   const [printMode, setPrintMode] = useState(false);
   const [expandedPatient, setExpandedPatient] = useState<string | null>(null);
   const router = useRouter();
 
-  
-    
   const loadPatients = () => {
     fetch("/api/patients")
       .then(async (res) => {
@@ -53,24 +80,145 @@ export default function PatientsPage() {
         const alertes = data.filter((p) =>
           p.diagnosis?.toLowerCase().includes("critique")
         );
+        
         const maintenant = new Date();
         const dansTroisJours = new Date();
         dansTroisJours.setDate(maintenant.getDate() + 3);
-        const rappels = data.filter((p) => {
+        
+        // Trouver les rendez-vous à venir
+        const prochainsRdvs = data.filter((p) => {
           if (!p.rendezvous) return false;
           const rdv = new Date(p.rendezvous);
           return rdv >= maintenant && rdv <= dansTroisJours;
         });
 
         if (alertes.length > 0) {
-          setNotification(`⚠️ ${alertes.length} patient(s) en état critique`);
-        } else if (rappels.length > 0) {
-          setNotification(`🔔 ${rappels.length} rendez-vous à venir dans 3 jours`);
+          setNotification(`${alertes.length} patient(s) en état critique`);
+          setNotificationType("warning");
+          setNotificationDetails(
+            alertes.map(p => `• ${p.name} - ${p.diagnosis}`).join("\n")
+          );
+          setNotificationData(undefined);
+          setAppointmentConfirmCallback(undefined);
+          setAppointmentCancelCallback(undefined);
+          setAppointmentRescheduleCallback(undefined);
+          setNotificationAction({
+            label: "Voir détails",
+            onClick: () => {
+              const patientId = alertes[0].id;
+              router.push(`/patients/dossier/${patientId}`);
+            }
+          });
+        } else if (prochainsRdvs.length > 0) {
+          // Si un seul RDV, montrer les détails avec le nouveau format
+          if (prochainsRdvs.length === 1) {
+            const patient = prochainsRdvs[0];
+            const rdvDate = new Date(patient.rendezvous);
+            const estUrgent = patient.diagnosis?.toLowerCase().includes("urgent") || false;
+            
+            // Déterminer si le rendez-vous est aujourd'hui
+            const estAujourdhui = rdvDate.toDateString() === maintenant.toDateString();
+            
+            // Numéro de téléphone fictif pour l'exemple
+            const contactTel = "01 23 45 67 89";
+            
+            // Informations améliorées pour le rendez-vous
+            setNotification(estUrgent ? "Rendez-vous médical urgent" : (estAujourdhui ? "Rendez-vous médical aujourd'hui" : "Rendez-vous médical à venir"));
+            setNotificationType("appointment");
+            setNotificationData({
+              patientName: patient.name,
+              patientId: patient.id,
+              date: rdvDate.toLocaleDateString("fr-FR", {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+              }),
+              time: rdvDate.toLocaleTimeString("fr-FR", {
+                hour: "2-digit",
+                minute: "2-digit"
+              }),
+              duration: "1 heure",
+              doctorName: patient.medecin || "Non assigné",
+              reason: patient.diagnosis || "Consultation générale",
+              instructions: patient.notes || undefined,
+              contactPhone: contactTel,
+              isUrgent: estUrgent,
+              insuranceRequired: true,
+              documents: patient.allergies 
+                ? ["Carte Vitale", "Pièce d'identité", "Carnet de santé", "Liste des allergies"] 
+                : ["Carte Vitale", "Pièce d'identité", "Carnet de santé"],
+              location: "Cabinet médical principal",
+              address: "123 Avenue de la Médecine, 75001 Paris"
+            });
+            
+            // Configuration des callbacks pour les actions de rendez-vous
+            setAppointmentConfirmCallback(() => {
+              // Code pour confirmer le rdv
+              console.log(`Rendez-vous confirmé pour ${patient.name}`);
+              // Ici on pourrait appeler une API pour mettre à jour le statut
+            });
+            
+            setAppointmentCancelCallback(() => {
+              // Code pour annuler le rdv
+              console.log(`Rendez-vous annulé pour ${patient.name}`);
+              // Ici on pourrait appeler une API pour mettre à jour le statut
+            });
+            
+            setAppointmentRescheduleCallback(() => {
+              // Code pour reprogrammer
+              router.push(`/patients/rendez-vous/${patient.id}/reprogrammer`);
+            });
+            
+            setNotificationAction({
+              label: "Voir le dossier",
+              onClick: () => {
+                router.push(`/patients/dossier/${patient.id}`);
+              }
+            });
+          } else {
+            // Si plusieurs RDV, montrer un résumé
+            setNotification(`${prochainsRdvs.length} rendez-vous à venir dans les 3 prochains jours`);
+            setNotificationType("info");
+            
+            const details = prochainsRdvs.map(p => {
+              const rdvDate = new Date(p.rendezvous);
+              return `• ${p.name} - ${rdvDate.toLocaleDateString("fr-FR", {weekday: 'long'})} ${rdvDate.toLocaleDateString("fr-FR")} à ${rdvDate.toLocaleTimeString("fr-FR", {hour: "2-digit", minute: "2-digit"})}`;
+            }).join("\n");
+            
+            setNotificationDetails(details);
+            setNotificationData(undefined);
+            setAppointmentConfirmCallback(undefined);
+            setAppointmentCancelCallback(undefined);
+            setAppointmentRescheduleCallback(undefined);
+            setNotificationAction({
+              label: "Voir tous les RDV",
+              onClick: () => {
+                // Rediriger vers une page de calendrier (à implémenter)
+                router.push("/rendez-vous");
+              }
+            });
+          }
+        } else {
+          // Pas de notification
+          setNotification("");
+          setNotificationDetails(undefined);
+          setNotificationData(undefined);
+          setNotificationAction(undefined);
+          setAppointmentConfirmCallback(undefined);
+          setAppointmentCancelCallback(undefined);
+          setAppointmentRescheduleCallback(undefined);
         }
       })
       .catch((err) => {
         console.error("Erreur chargement patients:", err);
         setPatients([]);
+        setNotification("Erreur lors du chargement des patients");
+        setNotificationType("error");
+        setNotificationData(undefined);
+        setAppointmentConfirmCallback(undefined);
+        setAppointmentCancelCallback(undefined);
+        setAppointmentRescheduleCallback(undefined);
       });
   };
 
@@ -81,6 +229,46 @@ export default function PatientsPage() {
     } else {
       loadPatients();
     }
+    
+    // Décommenter pour tester la notification améliorée des rendez-vous
+    /*
+    setTimeout(() => {
+      setNotification("Rappel de rendez-vous médical");
+      setNotificationType("appointment");
+      setNotificationData({
+        patientName: "Martin Dupont",
+        patientId: "P123456",
+        date: "Vendredi 11 avril 2025",
+        time: "14:30",
+        duration: "45 minutes",
+        doctorName: "Dr. Sophie Lambert",
+        speciality: "Cardiologie",
+        reason: "Suivi post-opératoire",
+        location: "Clinique Saint-Joseph",
+        address: "45 boulevard de l'Hôpital, 75013 Paris",
+        instructions: "Veuillez apporter vos derniers résultats d'analyses sanguines et votre carnet de suivi.",
+        contactPhone: "01 23 45 67 89",
+        isUrgent: false,
+        insuranceRequired: true,
+        documents: ["Carte Vitale", "Pièce d'identité", "Résultats d'analyses", "Ordonnances en cours"]
+      });
+      setAppointmentConfirmCallback(() => {
+        console.log("RDV confirmé");
+      });
+      setAppointmentCancelCallback(() => {
+        console.log("RDV annulé");
+      });
+      setAppointmentRescheduleCallback(() => {
+        router.push("/rendez-vous/reprogrammer");
+      });
+      setNotificationAction({
+        label: "Voir le dossier",
+        onClick: () => {
+          console.log("Redirection vers le dossier patient");
+        }
+      });
+    }, 1000);
+    */
   }, []);
 
   const handleDelete = async (id: string) => {
@@ -90,9 +278,17 @@ export default function PatientsPage() {
         if (!res.ok) throw new Error(`Erreur suppression patient: ${res.status}`);
         loadPatients();
         setNotification("Patient supprimé avec succès");
+        setNotificationType("success");
+        setNotificationDetails(undefined);
+        setNotificationData(undefined);
+        setNotificationAction(undefined);
+        setAppointmentConfirmCallback(undefined);
+        setAppointmentCancelCallback(undefined);
+        setAppointmentRescheduleCallback(undefined);
       } catch (error) {
         console.error("Erreur suppression patient:", error);
         setNotification("Erreur lors de la suppression");
+        setNotificationType("error");
       }
     }
   };
@@ -166,7 +362,6 @@ export default function PatientsPage() {
     });
   };
   
-
   const renderSexe = (sexe: string) => {
     switch (sexe?.toUpperCase()) {
       case 'M':
@@ -199,9 +394,11 @@ export default function PatientsPage() {
   };
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    
       <Navbar />
-
+      
       <div className="container mx-auto px-4 py-8 text-black">
         <motion.div
           className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 print:hidden"
@@ -479,7 +676,19 @@ export default function PatientsPage() {
         </motion.div>
 
         {notification && (
-          <Notification message={notification} onClose={() => setNotification("")} />
+          <Notification 
+            message={notification} 
+            type={notificationType}
+            details={notificationDetails}
+            appointmentData={notificationData}
+            action={notificationAction}
+            onClose={() => {
+              setNotification("");
+              setNotificationDetails(undefined);
+              setNotificationData(undefined);
+              setNotificationAction(undefined);
+            }} 
+          />
         )}
 
         <style jsx global>{`
@@ -531,5 +740,6 @@ export default function PatientsPage() {
         `}</style>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

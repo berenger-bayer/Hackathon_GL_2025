@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaHeartbeat, FaUserMd, FaChartLine, FaLightbulb, FaShieldAlt, FaHandsHelping } from "react-icons/fa";
 import Navbar from "../components/Navbar";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 
 
@@ -38,6 +39,8 @@ const TeamMember = ({ name, role, img }) => (
 
 export default function About() {
   return (
+    <ProtectedRoute>
+  
     <div className="min-h-screen bg-gray-50">
       <Navbar />
     
@@ -62,7 +65,7 @@ export default function About() {
               href="/" 
               className="inline-block px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition duration-300"
             >
-              Nous contacter
+              Diagnostque IA
             </Link>
           </motion.div>
         </div>
@@ -166,10 +169,11 @@ export default function About() {
           </motion.div>
 
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            <TeamMember name="Dr. Jean Dupont" role="Néphrologue" img={undefined} />
-            <TeamMember name="Marie Lambert" role="Data Scientist" img={undefined} />
-            <TeamMember name="Sophie Chen" role="Ingénieure Logiciel" img={undefined} />
-            <TeamMember name="Paul Martin" role="Designer UX" img={undefined} />
+            <TeamMember name="BOUSSARI Samuel" role="Développeur web/Mobile" img={undefined} />
+            <TeamMember name="SANNI BAYER S. Berenger" role="Développeur web/Mobile" img={undefined} />
+            <TeamMember name="TONON Marie-Orens" role="Développeur web/Mobile" img={undefined} />
+            <TeamMember name="AHOKPOSSI Brunel" role="Développeur web/Mobile" img={undefined} />
+            <TeamMember name="WEDJANGNON Axel" role="Développeur web/Mobile" img={undefined} />
           </div>
         </div>
       </section>
@@ -223,5 +227,7 @@ export default function About() {
         </div>
       </footer>
     </div>
+  </ProtectedRoute>
+    
   );
 }

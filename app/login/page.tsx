@@ -13,35 +13,48 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Vérifier si l'utilisateur vient d'être déconnecté
-    const logoutFlag = sessionStorage.getItem("justLoggedOut");
-    
-    if (logoutFlag === "true") {
-      // Supprimer le flag de déconnexion
-      sessionStorage.removeItem("justLoggedOut");
-      setIsLoading(false);
-      return; // Ne pas rediriger, forcer la connexion
-    }
-    
-    // Vérifier si l'utilisateur est connecté
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (isLoggedIn === "true") {
-      router.push("/"); // Redirection si déjà connecté
-    } else {
-      setIsLoading(false);
-    }
+    const checkAuth = () => {
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true" || 
+                        document.cookie.includes("isLoggedIn=true");
+      
+      if (isLoggedIn) {
+        // Empêcher la boucle de redirection
+        router.replace("/");
+      } else {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
   }, [router]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD) {
+      // Stocker l'état de connexion
       localStorage.setItem("isLoggedIn", "true");
-      router.push("/");
+      document.cookie = "isLoggedIn=true; path=/; max-age=86400"; // 24h
+      
+      // Redirection immédiate
+      window.location.href = "/"; // Utilisez window.location pour éviter les problèmes de cache
     } else {
       alert("Nom d'utilisateur ou mot de passe incorrect.");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center">
+          <div className="spinner-border text-blue-600" role="status">
+            <span className="sr-only">Chargement...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
   // Afficher un état de chargement pendant la vérification
   if (isLoading) {

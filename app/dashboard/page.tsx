@@ -10,6 +10,7 @@ import { ProgressCircle } from "../components/charts/ProgressCircle";
 import { DataTable } from "../components/charts/DataTable";
 import { CalendarChart } from "../components/charts/CalendarChart";
 import Navbar from "../components/Navbar";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 type Stats = {
   totalPatients: number;
@@ -80,8 +81,11 @@ export default function ModernDashboard() {
   }
 
   return (
+    <ProtectedRoute>
+  
     <div className="min-h-screen bg-gray-50">
       <Navbar />
+      
 
       {/* Header */}
       <header className="bg-white shadow-sm">
@@ -253,6 +257,8 @@ export default function ModernDashboard() {
         </div>
       </main>
     </div>
+    </ProtectedRoute>
+    
   );
 }
 
