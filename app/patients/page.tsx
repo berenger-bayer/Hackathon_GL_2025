@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-undef */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -64,12 +63,11 @@ export default function PatientsPage() {
   const [notificationType, setNotificationType] = useState<"success" | "error" | "warning" | "info" | "appointment">("info");
   const [notificationDetails, setNotificationDetails] = useState<string | undefined>(undefined);
   const [notificationData, setNotificationData] = useState<MedicalAppointmentData | undefined>(undefined);
-  const [notificationAction, setNotificationAction] = useState<any>(undefined);
-  const [appointmentConfirmCallback, setAppointmentConfirmCallback] = useState<(() => void) | undefined>(undefined);
-  const [appointmentCancelCallback, setAppointmentCancelCallback] = useState<(() => void) | undefined>(undefined);
-  const [appointmentRescheduleCallback, setAppointmentRescheduleCallback] = useState<(() => void) | undefined>(undefined);
+  const [notificationAction, setNotificationAction] = useState<unknown>(undefined);
+  const [, setAppointmentConfirmCallback] = useState<(() => void) | undefined>(undefined);
+  const [, setAppointmentCancelCallback] = useState<(() => void) | undefined>(undefined);
+  const [, setAppointmentRescheduleCallback] = useState<(() => void) | undefined>(undefined);
   
-  const [printMode, setPrintMode] = useState(false);
   const [expandedPatient, setExpandedPatient] = useState<string | null>(null);
   const router = useRouter();
 
@@ -99,7 +97,7 @@ export default function PatientsPage() {
           setNotification(`${alertes.length} patient(s) en état critique`);
           setNotificationType("warning");
           setNotificationDetails(
-            alertes.map((p: { name: any; diagnosis: any; }) => `• ${p.name} - ${p.diagnosis}`).join("\n")
+            alertes.map((p: { name: unknown; diagnosis: unknown; }) => `• ${p.name} - ${p.diagnosis}`).join("\n")
           );
           setNotificationData(undefined);
           setAppointmentConfirmCallback(undefined);
@@ -184,7 +182,7 @@ export default function PatientsPage() {
             setNotification(`${prochainsRdvs.length} rendez-vous à venir dans les 3 prochains jours`);
             setNotificationType("info");
             
-            const details = prochainsRdvs.map((p: { rendezvous: string | number | Date; name: any; }) => {
+            const details = prochainsRdvs.map((p: { rendezvous: string | number | Date; name: unknown; }) => {
               const rdvDate = new Date(p.rendezvous);
               return `• ${p.name} - ${rdvDate.toLocaleDateString("fr-FR", {weekday: 'long'})} ${rdvDate.toLocaleDateString("fr-FR")} à ${rdvDate.toLocaleTimeString("fr-FR", {hour: "2-digit", minute: "2-digit"})}`;
             }).join("\n");
@@ -325,8 +323,8 @@ export default function PatientsPage() {
       }
       
       return sortAsc
-        ? (valueA as any) - (valueB as any)
-        : (valueB as any) - (valueA as any);
+        ? (valueA as never) - (valueB as never)
+        : (valueB as never) - (valueA as never);
     });
 
   const calculateIMC = (poids: number | null, taille: number | null) => {
@@ -378,23 +376,6 @@ export default function PatientsPage() {
     }
   };
 
-  const getHighlighted = (key: keyof Patient, value: string | number | null): JSX.Element | string => {
-    if (value === null) return "-";
-    const text = String(value);
-    if (filterKey === key && search) {
-      return (
-        <span
-          dangerouslySetInnerHTML={{
-            __html: text.replace(
-              new RegExp(`(${search})`, "gi"),
-              `<mark class="bg-yellow-300">$1</mark>`
-            ),
-          }}
-        />
-      );
-    }
-    return text;
-  };
 
   return (
     <ProtectedRoute>

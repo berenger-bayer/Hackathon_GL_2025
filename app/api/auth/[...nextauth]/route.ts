@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
         }
         return session;
     },
-    async jwt({ token, user }: { token: JWT; user?: any }) {
+    async jwt({ token, user }: { token: JWT; user?: any }): Promise<JWT> {
         if (user) {
             token.role = user.role;
         }
