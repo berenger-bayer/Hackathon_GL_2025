@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -15,18 +15,11 @@ interface UpdatePatientData {
   traitement?: string;
 }
 
-// 🔧 Fonction utilitaire pour extraire l’ID
-function getIdFromRequest(req: NextRequest): string | null {
-  const id = req.nextUrl.pathname.split('/').pop();
-  return id && id !== '[id]' ? id : null;
-}
-
-export async function GET(req: NextRequest) {
-  const id = getIdFromRequest(req);
-
-  if (!id) {
-    return NextResponse.json({ error: "ID du patient manquant" }, { status: 400 });
-  }
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
 
   try {
     const patient = await prisma.patient.findUnique({ where: { id } });
@@ -42,12 +35,11 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest) {
-  const id = getIdFromRequest(req);
-
-  if (!id) {
-    return NextResponse.json({ error: "ID du patient manquant" }, { status: 400 });
-  }
+export async function PUT(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
 
   try {
     const data: UpdatePatientData = await req.json();
@@ -64,12 +56,11 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-export async function DELETE(req: NextRequest) {
-  const id = getIdFromRequest(req);
-
-  if (!id) {
-    return NextResponse.json({ error: "ID du patient manquant" }, { status: 400 });
-  }
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
 
   try {
     await prisma.patient.delete({ where: { id } });
