@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import NextAuth, { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+// lib/auth.ts
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import CredentialsProvider from "next-auth/providers/credentials";
+import type { NextAuthOptions } from "next-auth";
 import type { JWT } from "next-auth/jwt"; 
-import type { Session } from "next-auth"; 
-
+import type { Session } from "next-auth";
 
 const prisma = new PrismaClient();
 
@@ -40,22 +39,18 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   callbacks: {
     async session({ session, token }: { session: Session; token: JWT }) {
-        if (session.user) {
-            session.user.id = token.sub as string; // Ajout de `as string`
-            session.user.role = token.role as string; // Ajout de `as string`
-        }
-        return session;
+      if (session.user) {
+        session.user.id = token.sub as string;
+        session.user.role = token.role as string;
+      }
+      return session;
     },
     async jwt({ token, user }: { token: JWT; user?: any }): Promise<JWT> {
-        if (user) {
-            token.role = user.role;
-        }
-        return token;
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
     },
-},
+  },
   secret: process.env.NEXTAUTH_SECRET,
 };
-
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
-
