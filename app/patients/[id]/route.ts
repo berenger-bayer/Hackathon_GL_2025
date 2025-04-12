@@ -1,9 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 // Mettre à jour un patient
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  const id = params.id;
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
 
   try {
     // Récupérer le corps de la requête

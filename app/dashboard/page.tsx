@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -11,6 +12,7 @@ import { DataTable } from "../components/charts/DataTable";
 import { CalendarChart } from "../components/charts/CalendarChart";
 import Navbar from "../components/Navbar";
 import ProtectedRoute from "../components/ProtectedRoute";
+import router from "next/router";
 
 type Stats = {
   totalPatients: number;
@@ -21,6 +23,14 @@ type Stats = {
   riskDistribution: { risk: string; count: number }[];
   recentPatients: { id: string; name: string; lastVisit: string; status: string }[];
 };
+
+const notificationAction = {
+  label: 'Voir',
+  onClick: () => {
+    // Par exemple :
+    router.push('/patients/details');
+  }
+} as const;
 
 export default function ModernDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -220,8 +230,7 @@ export default function ModernDashboard() {
           >
             <h2 className="text-lg font-semibold mb-4">Diagnostics Fréquents</h2>
             <CalendarChart
-              data={stats.diagnoses || []}
-              height={350}
+              data={stats.diagnoses}
             />
           </motion.div>
 
@@ -246,7 +255,6 @@ export default function ModernDashboard() {
                       value === "Stable" ? "bg-green-100 text-green-800" :
                       "bg-yellow-100 text-yellow-800"
                     }`}>
-                      {value}
                     </span>
                   )
                 }
@@ -262,8 +270,17 @@ export default function ModernDashboard() {
   );
 }
 
+
+interface KpiCardProps {
+  icon: React.ReactNode;
+  title: string;
+  value: string | number;
+  change?: string;
+  trend?: 'up' | 'down';
+}
+
 // Component for KPI Cards
-function KpiCard({ icon, title, value, change, trend }) {
+function KpiCard({ icon, title, value, change, trend }: KpiCardProps) {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
       <div className="flex justify-between">

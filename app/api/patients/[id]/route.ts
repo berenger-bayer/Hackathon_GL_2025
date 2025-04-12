@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -16,30 +16,28 @@ interface UpdatePatientData {
 }
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await context.params;
 
   try {
     const patient = await prisma.patient.findUnique({ where: { id } });
-
     if (!patient) {
       return NextResponse.json({ error: `Patient non trouvé avec l'ID: ${id}` }, { status: 404 });
     }
-
     return NextResponse.json(patient);
   } catch (error) {
-    console.error("Erreur récupération patient:", error);
-    return NextResponse.json({ error: "Erreur serveur lors de la récupération du patient" }, { status: 500 });
+    console.error(error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
 
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await context.params;
 
   try {
     const data: UpdatePatientData = await req.json();
@@ -57,10 +55,10 @@ export async function PUT(
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await context.params;
 
   try {
     await prisma.patient.delete({ where: { id } });

@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-no-undef */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -52,6 +52,11 @@ type MedicalAppointmentData = {
   documents?: string[];
 };
 
+interface NotificationAction {
+  label: string;
+  onClick: () => void;
+}
+
 export default function PatientsPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [search, setSearch] = useState("");
@@ -63,10 +68,10 @@ export default function PatientsPage() {
   const [notificationType, setNotificationType] = useState<"success" | "error" | "warning" | "info" | "appointment">("info");
   const [notificationDetails, setNotificationDetails] = useState<string | undefined>(undefined);
   const [notificationData, setNotificationData] = useState<MedicalAppointmentData | undefined>(undefined);
-  const [notificationAction, setNotificationAction] = useState<unknown>(undefined);
-  const [, setAppointmentConfirmCallback] = useState<(() => void) | undefined>(undefined);
-  const [, setAppointmentCancelCallback] = useState<(() => void) | undefined>(undefined);
-  const [, setAppointmentRescheduleCallback] = useState<(() => void) | undefined>(undefined);
+  const [notificationAction, setNotificationAction] = useState<NotificationAction | undefined>(undefined);
+  const [appointmentConfirmCallback, setAppointmentConfirmCallback] = useState<(() => void) | undefined>(undefined);
+  const [appointmentCancelCallback, setAppointmentCancelCallback] = useState<(() => void) | undefined>(undefined);
+  const [appointmentRescheduleCallback, setAppointmentRescheduleCallback] = useState<(() => void) | undefined>(undefined);
   
   const [expandedPatient, setExpandedPatient] = useState<string | null>(null);
   const router = useRouter();
@@ -78,7 +83,7 @@ export default function PatientsPage() {
         const data = await res.json();
         setPatients(data);
 
-        const alertes = data.filter((p: { diagnosis: string; }) =>
+        const alertes = data.filter((p: Patient) =>
           p.diagnosis?.toLowerCase().includes("critique")
         );
         
@@ -87,7 +92,7 @@ export default function PatientsPage() {
         dansTroisJours.setDate(maintenant.getDate() + 3);
         
         // Trouver les rendez-vous à venir
-        const prochainsRdvs = data.filter((p: { rendezvous: string | number | Date; }) => {
+        const prochainsRdvs = data.filter((p: Patient) => {
           if (!p.rendezvous) return false;
           const rdv = new Date(p.rendezvous);
           return rdv >= maintenant && rdv <= dansTroisJours;
@@ -97,7 +102,7 @@ export default function PatientsPage() {
           setNotification(`${alertes.length} patient(s) en état critique`);
           setNotificationType("warning");
           setNotificationDetails(
-            alertes.map((p: { name: unknown; diagnosis: unknown; }) => `• ${p.name} - ${p.diagnosis}`).join("\n")
+            alertes.map((p: Patient) => `• ${p.name} - ${p.diagnosis}`).join("\n")
           );
           setNotificationData(undefined);
           setAppointmentConfirmCallback(undefined);
@@ -114,7 +119,7 @@ export default function PatientsPage() {
           // Si un seul RDV, montrer les détails avec le nouveau format
           if (prochainsRdvs.length === 1) {
             const patient = prochainsRdvs[0];
-            const rdvDate = new Date(patient.rendezvous);
+            const rdvDate = new Date(patient.rendezvous || "");
             const estUrgent = patient.diagnosis?.toLowerCase().includes("urgent") || false;
             
             // Déterminer si le rendez-vous est aujourd'hui
@@ -182,8 +187,8 @@ export default function PatientsPage() {
             setNotification(`${prochainsRdvs.length} rendez-vous à venir dans les 3 prochains jours`);
             setNotificationType("info");
             
-            const details = prochainsRdvs.map((p: { rendezvous: string | number | Date; name: unknown; }) => {
-              const rdvDate = new Date(p.rendezvous);
+            const details = prochainsRdvs.map((p: Patient) => {
+              const rdvDate = new Date(p.rendezvous || "");
               return `• ${p.name} - ${rdvDate.toLocaleDateString("fr-FR", {weekday: 'long'})} ${rdvDate.toLocaleDateString("fr-FR")} à ${rdvDate.toLocaleTimeString("fr-FR", {hour: "2-digit", minute: "2-digit"})}`;
             }).join("\n");
             
@@ -664,7 +669,6 @@ export default function PatientsPage() {
             message={notification} 
             type={notificationType}
             details={notificationDetails}
-            appointmentData={notificationData}
             action={notificationAction}
             onClose={() => {
               setNotification("");

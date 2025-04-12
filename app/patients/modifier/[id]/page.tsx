@@ -5,10 +5,32 @@ import { useRouter, useParams } from "next/navigation";
 import { FaSave, FaTimes, FaUser, FaNotesMedical, FaWeight, FaRulerVertical, FaIdCard, FaUserMd, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 import { toast, Toaster } from "react-hot-toast";
 
+interface PatientForm {
+  name: string;
+  age: string;
+  sexe: string;
+  diagnosis: string;
+  poids: string;
+  taille: string;
+  traitement: string;
+  numSecu: string;
+  medecin: string;
+  allergies: string;
+  groupeSanguin: string;
+}
+
+interface FormErrors {
+  [key: string]: string;
+}
+
+interface FormTouched {
+  [key: string]: boolean;
+}
+
 export default function EditPatientPage() {
   const router = useRouter();
-  const { id } = useParams();
-  const [patient, setPatient] = useState({
+  const { id } = useParams<{ id: string }>();
+  const [patient, setPatient] = useState<PatientForm>({
     name: "",
     age: "",
     sexe: "",
@@ -23,8 +45,8 @@ export default function EditPatientPage() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<FormTouched>({});
   const [numSecuExists, setNumSecuExists] = useState(false);
 
   useEffect(() => {
@@ -54,7 +76,8 @@ export default function EditPatientPage() {
         });
       } catch (err) {
         console.error("Erreur chargement patient:", err);
-        toast.error(err.message, {
+        const message = err instanceof Error ? err.message : "Erreur inconnue";
+        toast.error(message, {
           icon: <FaExclamationTriangle className="text-red-500" />,
         });
         router.push("/patients");
@@ -64,9 +87,9 @@ export default function EditPatientPage() {
     };
 
     fetchPatient();
-  }, [id]);
+  }, [id, router]);
 
-  const validateField = (name, value) => {
+  const validateField = (name: keyof PatientForm, value: string): string => {
     let error = "";
     
     switch (name) {
@@ -76,18 +99,18 @@ export default function EditPatientPage() {
         break;
       case "age":
         if (!value) error = "L'âge est requis";
-        else if (isNaN(value)) error = "L'âge doit être un nombre";
+        else if (isNaN(Number(value))) error = "L'âge doit être un nombre";
         else if (parseInt(value) < 0 || parseInt(value) > 120) error = "L'âge doit être entre 0 et 120";
         break;
       case "numSecu":
         if (value && !/^\d{13,15}$/.test(value)) error = "Doit contenir 13 à 15 chiffres";
         break;
       case "taille":
-        if (value && (isNaN(value) || parseFloat(value) < 0.5 || parseFloat(value) > 2.5)) 
+        if (value && (isNaN(Number(value)) || parseFloat(value) < 0.5 || parseFloat(value) > 2.5)) 
           error = "La taille doit être entre 0.5 et 2.5 mètres";
         break;
       case "poids":
-        if (value && (isNaN(value) || parseFloat(value) < 1 || parseFloat(value) > 300)) 
+        if (value && (isNaN(Number(value)) || parseFloat(value) < 1 || parseFloat(value) > 300)) 
           error = "Le poids doit être entre 1 et 300 kg";
         break;
       case "diagnosis":
@@ -100,30 +123,30 @@ export default function EditPatientPage() {
     return error;
   };
 
-  const handleBlur = (e) => {
-    const { name, value } = e.target;
-    setTouched({ ...touched, [name]: true });
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
     
-    if (name === "numSecu" && value && value !== patient.numSecu) {
-      checkNumSecuExists(value);
+    if (name === "numSecu" && patient.numSecu && patient.numSecu !== patient.numSecu) {
+      checkNumSecuExists(patient.numSecu);
     }
     
-    const error = validateField(name, value);
-    setErrors({ ...errors, [name]: error });
+    const error = validateField(name as keyof PatientForm, patient[name as keyof PatientForm]);
+    setErrors(prev => ({ ...prev, [name]: error }));
   };
 
-  const checkNumSecuExists = async (numSecu) => {
+  const checkNumSecuExists = async (numSecu: string) => {
     try {
       const res = await fetch(`/api/patients/check-numsecu?numSecu=${numSecu}&excludeId=${id}`);
       const data = await res.json();
       
       if (data.exists) {
-        setErrors({ ...errors, numSecu: "Ce numéro de sécurité sociale est déjà utilisé" });
+        setErrors(prev => ({ ...prev, numSecu: "Ce numéro de sécurité sociale est déjà utilisé" }));
         setNumSecuExists(true);
       } else {
         setNumSecuExists(false);
         if (errors.numSecu === "Ce numéro de sécurité sociale est déjà utilisé") {
-          setErrors({ ...errors, numSecu: "" });
+          setErrors(prev => ({ ...prev, numSecu: "" }));
         }
       }
     } catch (err) {
@@ -131,22 +154,22 @@ export default function EditPatientPage() {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setPatient({ ...patient, [name]: value });
+    setPatient(prev => ({ ...prev, [name]: value }));
     
     if (touched[name]) {
-      const error = validateField(name, value);
-      setErrors({ ...errors, [name]: error });
+      const error = validateField(name as keyof PatientForm, value);
+      setErrors(prev => ({ ...prev, [name]: error }));
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    const newErrors = {};
-    Object.keys(patient).forEach(key => {
+    const newErrors: FormErrors = {};
+    (Object.keys(patient) as Array<keyof PatientForm>).forEach(key => {
       if (key === "numSecu" && patient[key] && numSecuExists) {
         newErrors[key] = "Ce numéro de sécurité sociale est déjà utilisé";
       } else {
@@ -155,7 +178,7 @@ export default function EditPatientPage() {
     });
     
     setErrors(newErrors);
-    setTouched(Object.keys(patient).reduce((acc, key) => ({ ...acc, [key]: true }), {}));
+    setTouched(Object.keys(patient).reduce((acc, key) => ({ ...acc, [key]: true }), {} as FormTouched));
     
     const hasErrors = Object.values(newErrors).some(error => error);
     if (hasErrors) {
@@ -193,7 +216,8 @@ export default function EditPatientPage() {
       router.push(`/patients/?updated=true`);
     } catch (err) {
       console.error("Erreur mise à jour:", err);
-      toast.error(err.message, {
+      const message = err instanceof Error ? err.message : "Erreur inconnue";
+      toast.error(message, {
         icon: <FaExclamationTriangle className="text-red-500" />,
       });
     } finally {

@@ -1,15 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 interface Column {
   header: string;
   accessor: string;
-  cell?: (value: any) => React.ReactNode;
+  cell?: (value: unknown) => React.ReactNode;
 }
 
 interface DataTableProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: { [key: string]: any }[];
+  data: { [key: string]: unknown }[];
   columns: Column[];
   height?: number;
 }
@@ -35,7 +33,7 @@ export function DataTable({ data, columns, height = 300 }: DataTableProps) {
             <tr key={i}>
               {columns.map((column) => (
                 <td key={column.accessor} className="px-6 py-4 whitespace-nowrap">
-                  {column.cell ? column.cell(row[column.accessor]) : row[column.accessor]}
+                  {column.cell ? column.cell(row[column.accessor as keyof typeof row]) : String(row[column.accessor as keyof typeof row])}
                 </td>
               ))}
             </tr>

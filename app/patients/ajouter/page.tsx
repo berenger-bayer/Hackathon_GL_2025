@@ -100,7 +100,8 @@ export default function AjouterPatientPage() {
       setShowSuccess(true);
       setTimeout(() => router.push("/patients"), 2000);
     } catch (error) {
-      setErrors({ submit: error.message });
+      const message = error instanceof Error ? error.message : 'Erreur inconnue';
+      setErrors({ submit: message });
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +112,10 @@ export default function AjouterPatientPage() {
     setFormData(prev => ({ ...prev, [id]: value }));
     
     if (errors[id]) {
-      setErrors(prev => ({ ...prev, [id]: undefined }));
+      setErrors(prev => ({ 
+        ...prev, 
+        [id]: undefined as unknown as string // Conversion de type
+      }));
     }
   };
 
